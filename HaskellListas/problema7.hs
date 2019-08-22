@@ -19,7 +19,7 @@ Motifique o arquivoalunos.hs(dispon ́ıvel no Moodle) de forma a
 -}
 
 alunos :: [(Int, String, Float)]
-alunos = [(1, "Ana", 3.4), (2, "Bob", 6.7), (3, "Tom", 7.6)]
+alunos = [(1, "Ana", 3.4), (2, "Bob", 6.7), (3, "Tom", 4.0)]
 
 getNome :: (Int, String, Float) -> String
 getNome (a,b,c) = b
@@ -28,23 +28,22 @@ getPrimeiroAluno :: [(Int, String, Float)] -> (Int, String, Float)
 getPrimeiroAluno (a:_) = a
 
 gerarPares :: [t] -> [u] -> [(t,u)]
-gerarPares l1 l2 = [(a,b) | a <- l1, b <- l2]
+gerarPares l1 l2 = [(a,b) | a <- l1, b <- l2, a /= b]
 
 aprovado :: (Int, String, Float) -> Bool
 aprovado (i, nome, media) = media >= 6
 
 aprovados ::  [(Int, String, Float)] -> [String]
 aprovados lista =  ( map getNome (filter (aprovado) lista) )
-{-
-aprovados [] = []
-aprovados ( (i,nome,media) : b ) =
-  if ( media >= 6 ) then
-    nome : (aprovados b)
-  else
-    aprovados b
--}
 
---aprovados2 ::  [(Int, String, Float)] -> [String]
+aprovados2 ::  [(Int, String, Float)] -> [String]
+aprovados2 [] = []
+aprovados2 ( (i,nome,media) : b ) =
+  if ( media >= 6 ) then
+    nome : (aprovados2 b)
+  else
+    aprovados2 b
 
 main = do
-    print (aprovados alunos)
+    print (aprovados2 alunos)
+    --print (gerarPares alunos)
