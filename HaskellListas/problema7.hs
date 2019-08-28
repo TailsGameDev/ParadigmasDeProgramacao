@@ -1,34 +1,18 @@
-{-
-Motifique o arquivoalunos.hs(dispon ́ıvel no Moodle) de forma a
- adicionar novas fun ̧c ̃oes:
- A:Crie uma fun ̧c ̃ao com a seguinte
-  assinatura: aprovados ::  [(Int, String, Float)] -> [String],a qual
-   recebe uma lista de alunos e retorna uma lista com o nome dos alunos
-    aprovados.  Um alunoest ́a aprovado se a sua m ́edia  ́e maior
-     ou igual a 6.  Utilizemapefilterpara resolver esta quest ̃ao.
-     B:Crie uma fun ̧c ̃ao com a seguinte assinatura:
-     aprovados2 ::  [(Int, String, Float)] -> [String],a qual recebe
-      uma lista de alunos e retorna uma lista com o nome dos alunos
-       aprovados.  Um alunoest ́a  aprovado  se  a  sua  m ́edia   ́e
-         maior  ou  igual  a  6.   N ̃ao utilizemapefilterpara
-         resolver  estaquest ̃ao.Utilizeo conceito delist
-          comprehension.C:Utilize  (e  modifique,  se  necess ́ario)
-            a  fun ̧c ̃aogerarParesvista  em  aula  e  dispon ́ıvel
-              no  arquivoalunos.hspara formar duplas de alunos.
-               Note que um aluno n ̃ao pode fazer dupla consigo mesmo.
--}
-
 alunos :: [(Int, String, Float)]
 alunos = [(1, "Ana", 3.4), (2, "Bob", 6.7), (3, "Tom", 4.0)]
 
 getNome :: (Int, String, Float) -> String
 getNome (a,b,c) = b
 
+getNota :: (Int, String, Float) -> Float
+getNota (a,b,c) = c
+
 getPrimeiroAluno :: [(Int, String, Float)] -> (Int, String, Float)
 getPrimeiroAluno (a:_) = a
 
-gerarPares :: [t] -> [u] -> [(t,u)]
-gerarPares l1 l2 = [(a,b) | a <- l1, b <- l2, a /= b]
+gerarPares :: Eq t => [t] -> [t] -> [(t,t)]
+gerarPares l1 l2 = [(a,b) | a <- l1, b <- l2, b /= a]
+--estah gerando pares repetidos soh que mudando a ordem
 
 aprovado :: (Int, String, Float) -> Bool
 aprovado (i, nome, media) = media >= 6
@@ -38,12 +22,18 @@ aprovados lista =  ( map getNome (filter (aprovado) lista) )
 
 aprovados2 ::  [(Int, String, Float)] -> [String]
 aprovados2 [] = []
+--aprovados2 [ (i,nome,media) ] = [b | b <- [nome], media>=6 ]--, media >=6 ]
+aprovados2 lista = [ (getNome b) | b <- lista, (getNota b) >= 6]
+
+{-
+aprovados2 [] = []
 aprovados2 ( (i,nome,media) : b ) =
   if ( media >= 6 ) then
     nome : (aprovados2 b)
   else
     aprovados2 b
+-}
 
 main = do
-    print (aprovados2 alunos)
+    print (gerarPares alunos alunos)
     --print (gerarPares alunos)
