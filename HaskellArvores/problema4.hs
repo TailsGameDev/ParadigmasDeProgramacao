@@ -23,9 +23,16 @@ data Arvore = Null | No Int Arvore Arvore
 
 menorNumero = -9001
 
+elementos ::  Arvore -> [Int]
+elementos Null = []
+elementos (No n esq dir) = [n] ++ (elementos esq) ++ (elementos dir)
+
+quantidade ::  Arvore -> Int
+quantidade a = maioresQueElemento a menorNumero
+
 mediaElementos ::  Arvore -> Float
 mediaElementos Null = 0
-mediaElementos a = (fromIntegral (somaElementos a)) / (fromIntegral (maioresQueElemento a menorNumero ))
+mediaElementos a = (fromIntegral (somaElementos a)) / (fromIntegral (quantidade a ))
 
 maioresQueElemento ::  Arvore -> Int -> Int
 maioresQueElemento Null _ = 0
@@ -75,3 +82,5 @@ main = do putStrLn (show (somaElementos minhaArvore))
           print( (ocorrenciasElemento minhaArvore 55) )
           print( (maioresQueElemento minhaArvore 56) )
           print( (mediaElementos minhaArvore) )
+          print( (quantidade minhaArvore) )
+          print( (elementos minhaArvore) )
