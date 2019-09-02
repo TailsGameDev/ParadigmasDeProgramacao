@@ -3,6 +3,7 @@ Crie uma função com assinatura inverte :: [t] -> [t], a qual recebe uma lista 
 deve retornar a mesma invertida. Não utilize nenhuma função pronta do Haskell para realizar esta tarefa.
 -}
 
+{-
 ultimo :: Eq t => [t] -> t
 ultimo (a:b) =
   if (b == []) then
@@ -19,8 +20,14 @@ primeiros (a:b:c) =
 
 inverte :: [t] -> [t]
 inverte [] = []
-inverte [e] = [e]
-inverte .oa = (primeiro a) &
+inverte (a:b) = (ultimo b) ++ (inverte (primeiros b) ) ++ a
+--inverte [e] = [e]
+--inverte .oa = (primeiro a) &
+-}
+
+inverte :: [t] -> [t]
+inverte [] = []
+inverte (a:b) = (inverte b) ++ [a]
 
 main = do
-  print( (primeiros [2,3,4]) )
+  print( (inverte [2,3,4,5]) )
