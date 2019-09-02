@@ -10,11 +10,11 @@ getNota (a,b,c) = c
 getPrimeiroAluno :: [(Int, String, Float)] -> (Int, String, Float)
 getPrimeiroAluno (a:_) = a
 
-contem :: [t] -> t -> Bool
+--contem :: [t] -> t -> Bool
 
 
-gerarPares :: Eq t => [t] -> [t] -> [(t,t)]
-gerarPares l1 l2 = [(a,b) | a <- l1, b <- l2, b /= a]
+gerarPares :: Ord t => [t] -> [t] -> [(t,t)]
+gerarPares l1 l2 = [(a,b) | a <- l1, b <- l2, a < b]
 --estah gerando pares repetidos soh que mudando a ordem
 
 aprovado :: (Int, String, Float) -> Bool
