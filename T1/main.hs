@@ -20,7 +20,7 @@ _  1 2 _
 -}
 
 matriz = [0, 0, 0, 0,
-          2, 0, 0, 0,
+          2, 3, 2, 0,
           0, 0, 0, 0,
           0, 0, 0, 0]
 
@@ -69,10 +69,31 @@ jaTemNaColuna n x y m =
     else
       jaTemNaColuna n x (y+1) m
 
---                           y     matriz   certo?
---vejoCertoLinhaEsqParaDir :: Int -> [Int] -> Bool
 
+quantosVejoEsqParaDir :: Int -> Int -> Int-> Int -> [Int] -> Int
+quantosVejoEsqParaDir x y iter maiorVisto m =
+    if (x >= tam-1) then
+      iter
+    else
+      if (getxym x y m) > maiorVisto then
+        quantosVejoEsqParaDir (x+1) y (iter+1) (getxym x y m) m
+      else
+        iter
+
+{-
+--                           x      y     iter  desejado   certo?
+vejoCertoLinhaEsqParaDir :: Int -> Int -> Int-> [Int] -> Bool
+vejoCertoLinhaEsqParaDir x y soma desejado =
+  if (x >= tam-1) then
+    True
+  else
+    if (iter > desejado) then
+      False
+    else
+      vejoCertoLinhaEsqParaDir (x+1) y ()
+      -}
 
 main = do
   putStr( (showMatriz 0 0 matriz) )
   print( (jaTemNaColuna 0 0 0 matriz) )
+  print( (quantosVejoEsqParaDir 1 2 0 0 matriz))
