@@ -1,0 +1,38 @@
+{-
+
+Leia o cap ́ıtulo 5 da apostila do professor Dovicchi, dispon ́ıvel no Moodle da
+disciplina e responda:A:O  que  s ̃ao  classes  primitivas  e  secund ́arias  no
+Haskell?   Cite  3  exemplos  de  classes  primitivas  e  3exemplos  de  classes
+secund ́arias.   Cite  o  papel  de  cada  uma  das  classes  citadas  e  alguns
+m ́etodosexistentes nelas, bem como o que esses m ́etodos fazem.B:Fa ̧ca um breve
+resumo sobre as classes num ́ericas do Haskell.  Como elas est ̃ao relacionadas
+entre si?Tente entender os m ́etodos dispon ́ıvel em cada classe.
+-}
+
+Classes primitivas sao definidas primariamente, enquanto as classes secundárias
+são definidas a partir de outras classes.
+
+Eq, Show e Read são exemplos de classes primitivas
+
+Eq tem o papel de dizer se as coisas podem ser comparadas de maneira a saber
+se são iguais ou não. Funções seriam igual e diferente
+
+Show e Read gerenciam as conversões de tipos numéricos para tipos textuais e
+o contrário. Alguns de seus métodos são show e read
+
+Ord, Num e Integral são exemplos de classes secundárias
+
+Ord define elementos totalmente ordenados. Algumas de suas funções são < > <=
+
+Num define os tipos numéricos. Algumas de suas funções são +, - e *
+
+Integral define os métodos numéricos de operações com integrais, que seriam de
+repente números inteiros ou algo parecido.
+
+B:
+As classes numéricas do haskell são Real, Integral, Fractional, Floating,
+RealFrac, RealFloat. Mas o negocio é só usar
+Int e Float, e quando dá erro tenta colocar um método fromIntegral em algum lugar.
+Daí essas classes instanciam os Int, Integer, Float e Double.
+Integral e RealFloat são as classes mais completas (suponho), pois herdam das outras
+(Tentei entender lá)

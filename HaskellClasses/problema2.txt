@@ -1,0 +1,21 @@
+Pesquise  sobre  os  diversos  tipos  de  polimorfismo  existentes:
+polimorfismo  universal  e  ad-hoc.   O  po-limorfismo  universal  pode  ser
+polimorfismo  por  inclus ̃ao  e  polimorfismo  param ́etrico,  enquanto  que
+opolimorfismo ad-hoc pode ser polimorfismo de sobrecarga e polimorfismo de coer ̧c ̃ao.
+Pesquise a diferen ̧caentre eles e exemplifique seu uso.
+Fa ̧ca um breve resumo sobre o assunto.
+
+1 Subtyping: eh quando subclasse tem método que faz diferente da super
+2 Ad-hoc (Overloading): método executa diferente de acordo com a quantidade
+de parâmetros passada
+
+3: Ad-hoc (Coercion): é quando um tipo eh convertido em outro (int a = 3.33 ou a= (int) 3.33)
+
+4 Parametric Polymorphism: quando tu faz uma função ou classe que trata um parâmetro
+ou agrumento independente do tipo. É Tipo Genérico kkkkk
+
+5 Polimorfismo estrutural: <-não manjei... mas meio que ela funciona para qualquer
+objeto que englobe certos tipos que tu especifica ao usar
+
+6 Row Polymorphism: incrementa o estrutural com método de maneira que tu pode
+misturar uns tipos ali.
