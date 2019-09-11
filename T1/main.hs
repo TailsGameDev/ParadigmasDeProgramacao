@@ -24,21 +24,46 @@ matriz = [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 tamanhoLinha :: [Int] -> Int -- eh soh uma raiz quadrada devolvendo Int
 tamanhoLinha matrix = round (fromIntegral(length matrix) **0.5)
 
+getxym :: Int -> Int -> [Int] -> Int
+getxym x y m = matriz !! (x + y*(tamanhoLinha m))
+
 --           x     y     matriz
 getLinha :: Int -> Int -> [Int] -> String
 getLinha x y m =
   if (x >= (tamanhoLinha matriz) -1) then
-    show (matriz !! (x + y*(tamanhoLinha m)) )
+    show ( getxym x y m )
   else
-    (show (matriz !! (x + y*(tamanhoLinha m))) ) ++ " " ++ (getLinha (x+1) y m)
+    show ( getxym x y m ) ++ " " ++ (getLinha (x+1) y m)
 
 --           x     y     matriz
 showMatriz :: Int-> Int-> [Int] -> String
 showMatriz x y m =
   if (y >= (tamanhoLinha matriz)-1) then
-    (getLinha x y m)
+    (getLinha x y m) ++ "\n"
   else
     (getLinha x y m) ++ "\n" ++ (showMatriz x (y+1) m)
 
+--              n      x      y      matriz   tem?
+jaTemNaLinha :: Int -> Int -> Int -> [Int] -> Bool
+jaTemNaLinha n x y m =
+  if x >= ( (tamanhoLinha m) -1) then
+    False
+  else
+    if n == getxym x y m then
+      True
+    else
+      jaTemNaLinha n (x+1) y m
+
+jaTemNaColuna :: Int -> Int -> Int -> [Int] -> Bool
+jaTemNaColuna n x y m =
+  if y >= ( (tamanhoLinha m) -1) then
+    False
+  else
+    if n == getxym x y m then
+      True
+    else
+      jaTemNaColuna n x (y+1) m
+
 main = do
   putStr( (showMatriz 0 0 matriz) )
+  print( (jaTemNaColuna 0 0 0 matriz) )
