@@ -20,7 +20,7 @@ _  1 2 _
 -}
 
 matriz = [0, 0, 0, 0,
-          2, 3, 2, 0,
+          2, 3, 4, 0,
           0, 0, 0, 0,
           0, 0, 0, 0]
 
@@ -80,6 +80,16 @@ quantosVejoEsqParaDir x y iter maiorVisto m =
       else
         iter
 
+quantosVejoDirParaEsq :: Int -> Int -> Int-> Int -> [Int] -> Int
+quantosVejoDirParaEsq x y iter maiorVisto m =
+    if (x <=0) then
+      iter
+    else
+      if (getxym x y m) > maiorVisto then
+        quantosVejoDirParaEsq (x-1) y (iter+1) (getxym x y m) m
+      else
+        iter
+
 {-
 --                           x      y     iter  desejado   certo?
 vejoCertoLinhaEsqParaDir :: Int -> Int -> Int-> [Int] -> Bool
@@ -96,4 +106,5 @@ vejoCertoLinhaEsqParaDir x y soma desejado =
 main = do
   putStr( (showMatriz 0 0 matriz) )
   print( (jaTemNaColuna 0 0 0 matriz) )
-  print( (quantosVejoEsqParaDir 1 2 0 0 matriz))
+  --print( (quantosVejoEsqParaDir 1 2 0 0 matriz))
+  print( (quantosVejoDirParaEsq (tam-2) 1 0 0 matriz))
