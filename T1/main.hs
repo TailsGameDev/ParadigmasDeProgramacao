@@ -108,18 +108,6 @@ insereNaPosicao num i pos (a:b) =
 
 setXY :: Int -> Int -> Int -> [Int] -> [Int]
 setXY num x y m = insereNaPosicao num 0 (x+y*tam) (removeDaPosicao 0 (x+y*tam) m)
-{-
---                           x      y     iter  desejado   certo?
-vejoCertoLinhaEsqParaDir :: Int -> Int -> Int-> [Int] -> Bool
-vejoCertoLinhaEsqParaDir x y soma desejado =
-  if (x >= tam-1) then
-    True
-  else
-    if (iter > desejado) then
-      False
-    else
-      vejoCertoLinhaEsqParaDir (x+1) y ()
-      -}
 
 main = do
   putStr( (showMatriz 0 0 matriz) )
