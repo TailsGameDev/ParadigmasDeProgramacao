@@ -19,13 +19,16 @@ _  1 2 _
    _ _
 -}
 
-matriz = [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+matriz = [0, 0, 0, 0,
+          2, 0, 0, 0,
+          0, 0, 0, 0,
+          0, 0, 0, 0]
 
 tamanhoLinha :: [Int] -> Int -- eh soh uma raiz quadrada devolvendo Int
 tamanhoLinha matrix = round (fromIntegral(length matrix) **0.5)
 
 getxym :: Int -> Int -> [Int] -> Int
-getxym x y m = matriz !! (x + y*(tamanhoLinha m))
+getxym x y m = m !! (x + y*(tamanhoLinha m))
 
 --           x     y     matriz
 getLinha :: Int -> Int -> [Int] -> String
