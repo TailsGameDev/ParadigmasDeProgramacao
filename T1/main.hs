@@ -19,6 +19,8 @@ _  1 2 _
    _ _
 -}
 
+possiveis = [1,2]
+
 matriz = [0, 0, 0, 0,
           2, 3, 4, 0,
           0, 0, 0, 0,
@@ -90,6 +92,22 @@ quantosVejoDirParaEsq x y iter maiorVisto m =
       else
         iter
 
+removeDaPosicao :: Int -> Int -> [Int] -> [Int]
+removeDaPosicao i pos (a:b) =
+  if i==pos then
+    b
+  else
+    [a] ++ (removeDaPosicao (i+1) pos b)
+
+insereNaPosicao :: Int -> Int -> Int -> [Int] -> [Int]
+insereNaPosicao num i pos (a:b) =
+  if i==(pos-1) then
+    [a] ++ [num] ++ b
+  else
+    [a] ++ (insereNaPosicao num (i+1) pos b)
+
+setXY :: Int -> Int -> Int -> [Int] -> [Int]
+setXY num x y m = insereNaPosicao num 0 (x+y*tam) (removeDaPosicao 0 (x+y*tam) m)
 {-
 --                           x      y     iter  desejado   certo?
 vejoCertoLinhaEsqParaDir :: Int -> Int -> Int-> [Int] -> Bool
@@ -108,3 +126,4 @@ main = do
   print( (jaTemNaColuna 0 0 0 matriz) )
   --print( (quantosVejoEsqParaDir 1 2 0 0 matriz))
   print( (quantosVejoDirParaEsq (tam-2) 1 0 0 matriz))
+  putStr( (showMatriz 0 0 (setXY 5 3 1 matriz) ) )
