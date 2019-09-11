@@ -69,7 +69,9 @@ jaTemNaColuna n x y m =
     else
       jaTemNaColuna n x (y+1) m
 
-vejoCertoLinha
+--                           y     matriz   certo?
+--vejoCertoLinhaEsqParaDir :: Int -> [Int] -> Bool
+
 
 main = do
   putStr( (showMatriz 0 0 matriz) )
