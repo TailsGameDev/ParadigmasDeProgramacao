@@ -1,0 +1,2 @@
+Combinador Y é uma função que recebe ela mesma como parâmetro, e retorna ela mesma.
+Aplicações interessantes são loops e recursão.

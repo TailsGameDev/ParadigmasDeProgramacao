@@ -1,0 +1,78 @@
+Sucessor: λn.λf.λx. f (n f x).
+Prececessor: λn.λf.λx. n (λg.λh. h (g f)) (λu. x) (λu. u)
+
+Anotações: o canal é aceitar a definição dos números, principalmente o número zero.
+Os outros números aparentemente são sucessões de zero, na verdade.
+    0 ≡ λf.λx. x
+    1 ≡ λf.λx. f x
+No exemplo, f seria a função sucessor.
+
+Sucessor de 0:
+λn.λf.λx. f (n f x)
+(λn.λf.λx. f (n f x)) 0
+(λn.(λf.λx. f (n f x))) 0
+λf. ( λx. f (0 f x) )
+λf. ( λx. f ( (λf.λx. x) f x) )
+λf. ( λx. f ( λx.( x ) x) )
+λf. ( λx. f (x) )
+(λf. λx. f x) = 1
+
+Sucessor de 1:
+λn.λf.λx. f (n f x)
+(λn.λf.λx. f (n f x)) 1
+(λn.(λf.λx. f (n f x))) 1
+λf. ( λx. f (1 f x) )
+λf. ( λx. f ( (λf. λx. f x) f x) )
+λf. ( λx. f ( (λx. f x) x) )
+λf. ( λx. f ( f x) )
+λf.  λx. f  f x = 2
+
+Sucessor de 2:
+λn.λf.λx. f (n f x)
+(λn.λf.λx. f (n f x)) 2
+(λn.(λf.λx. f (n f x))) 2
+λf. ( λx. f (2 f x) )
+λf. ( λx. f ( λf. ( λx. f ( f x) ) f x) )
+λf. ( λx. f ( λx. f ( f x) x) )
+λf. ( λx. f (f ( f x) ) )
+λf.  λx. f f f x = 3
+
+somar 0 + 1 e 1 + 2
+
+0 + 1
+Soma: λm.λn.λf.λx. m f (n f x)
+λm.λn.λf.λx. m f (n f x) 0 1
+λm.λn.λf.λx.( m f (n f x) ) 0 1
+λn.λf.λx.( 0 f (n f x ) ) 1
+λn. ( λf.λx.( 0 f (n f x ) ) ) 1
+λf. λx.( 0 f ( 1 f x ) )
+λf. λx.( (λf.λx. x) f ( 1 f x ) )
+λf. λx.( (λx. x) ( 1 f x ) )
+λf. λx.( (λx. x) ( (λf.λx. f x) f x ) )
+λf. λx.( (λx. x) ( λx. (f x) x ) )
+λf. λx.( (λx. x) ( f x ) )
+λf. λx.(  ( f x ) )
+λf. λx. f x = 1
+
+1 + 2
+… do exemplo anterior, analogamente com o destacado em negrito
+Soma 1 2 = λf. λx.( 1 f ( 2 f x ) )
+λf. λx.( (λf.λx. f x) f ( 2 f x ) )
+λf. λx.( (λx. f x) ( 2 f x ) )
+λf. λx.( (λx. f x) ( (λf.λx. f f x) f x ) )
+λf. λx.( (λx. f x) ( λx. f f x x ) )
+λf. λx.( (λx. f x) ( f f x ) )
+λf. λx.( f f f x) = 3
+
+Números de 1 até 10
+0 ≡ (λf.λx. x)
+1 ≡ (λf.λx. f x)
+2 ≡ (λf.λx. f f x)
+3 ≡ (λf.λx. f f f x)
+4 ≡ (λf.λx. f f f f x)
+5 ≡ (λf.λx. f f f f f x)
+6 ≡ (λf.λx. f f f f f f x)
+7 ≡ (λf.λx. f f f f f f f x)
+8 ≡ (λf.λx. f f f f f f f f x)
+9 ≡ (λf.λx. f f f f f f f f f x)
+10 ≡ λf.λx.f f f f f f f f f f x
