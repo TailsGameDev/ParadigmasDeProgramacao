@@ -21,12 +21,23 @@ _  1 2 _
 
 possiveis = [1,2]
 
-matriz = [0, 0, 0, 0,
-          2, 3, 4, 0,
-          0, 0, 0, 0,
-          0, 0, 0, 0]
 
+matriz = [0, 2, 1, 0,
+          2, 2, 1, 1,
+          1, 0, 0, 2,
+          0, 1, 2, 0]
+{-
+matriz = [0, 0, 0, 0, 0,
+          0, 1, 2, 3, 0,
+          0, 3, 1, 2, 0,
+          0, 2, 3, 1, 0,
+          0, 0, 0, 0, 0]
+-}
 tam = tamanhoLinha matriz
+
+infinito = 999999999
+inf = infinito
+w = infinito
 
 tamanhoLinha :: [Int] -> Int -- eh soh uma raiz quadrada devolvendo Int
 tamanhoLinha matrix = round (fromIntegral(length matrix) **0.5)
@@ -72,26 +83,6 @@ jaTemNaColuna n x y m =
       jaTemNaColuna n x (y+1) m
 
 
-quantosVejoEsqParaDir :: Int -> Int -> Int-> Int -> [Int] -> Int
-quantosVejoEsqParaDir x y iter maiorVisto m =
-    if (x >= tam-1) then
-      iter
-    else
-      if (getxym x y m) > maiorVisto then
-        quantosVejoEsqParaDir (x+1) y (iter+1) (getxym x y m) m
-      else
-        iter
-
-quantosVejoDirParaEsq :: Int -> Int -> Int-> Int -> [Int] -> Int
-quantosVejoDirParaEsq x y iter maiorVisto m =
-    if (x <=0) then
-      iter
-    else
-      if (getxym x y m) > maiorVisto then
-        quantosVejoDirParaEsq (x-1) y (iter+1) (getxym x y m) m
-      else
-        iter
-
 removeDaPosicao :: Int -> Int -> [Int] -> [Int]
 removeDaPosicao i pos (a:b) =
   if i==pos then
@@ -109,9 +100,58 @@ insereNaPosicao num i pos (a:b) =
 setXY :: Int -> Int -> Int -> [Int] -> [Int]
 setXY num x y m = insereNaPosicao num 0 (x+y*tam) (removeDaPosicao 0 (x+y*tam) m)
 
+--iter guarda quantos foram vistos
+--A funcao eh pensada para percorrer uma linha ou uma coluna no sentido
+--informado por deslocX ou deslocY (um deles deve ser zero, o outro 1 ou -1)
+--ateh o limite informado, e retorna quantos predios foi possivel ver daquele angulo
+--ele para quando le um zero, mas a ideia eh ir preenchendo e verificando de maneira que nao comece lendo zero
+quantosVejo :: Int->Int->Int->Int-> Int->Int->Int->Int-> [Int] -> Int
+quantosVejo x y iter maiorVisto deslocX deslocY limX limY m
+  | ( x == limX || y == limY ) =
+    iter -- resultado encontrado porque percorreu a sequencia inteira
+  | (getxym x y m) > maiorVisto = -- viu um predio maior e aumenta a contagem
+      quantosVejo (x+deslocX) (y+deslocY) (iter+1) (getxym x y m) deslocX deslocY limX limY m
+  | (getxym x y m) == maiorVisto = -- predio eh igual (0) dae continua lendo mas nao incrementa contagem
+      quantosVejo (x+deslocX) (y+deslocY)  (iter)  (getxym x y m) deslocX deslocY limX limY m
+  | otherwise = iter --resultado encontrado por que o predio eh menor que o anterior
+
+
+vejoCerto :: Int -> Int -> [Int] -> Bool
+vejoCerto x y m =
+  ((getxym    0       y    m) >= quantosVejo    1       y    0 0   1    0   (tam-1)   inf    m) && --esqParaDir
+  ((getxym (tam-1)    y    m) >= quantosVejo (tam-2)    y    0 0 (-1)   0      0      inf    m) && --dirParaEsq
+  ((getxym    x       0    m) >= quantosVejo    x       1    0 0   0    1     inf   (tam-1)  m) && --cimaParaBaixo
+  ((getxym    x    (tam-1) m) >= quantosVejo    x    (tam-2) 0 0   0  (-1)    inf      0     m) --baixoPraCima
+
+testaQtd :: Int->Int->[Int]->IO ()
+testaQtd x y m = do
+  putStr( "\nesq p/ dir:"++   show(quantosVejo    1       y    0 0   1    0   (tam-1)   inf    matriz) ) --esq para dir
+  putStr( "\ndir p/ esq:"++   show(quantosVejo (tam-2)    y    0 0 (-1)   0      0      inf    matriz) ) --dir para esq
+  putStr( "\ncima p/ baixo:"++show(quantosVejo    x       1    0 0   0    1     inf   (tam-1)  matriz) ) --cima para baixo
+  putStr( "\nbaixo p/ cima:"++show(quantosVejo    x    (tam-2) 0 0   0  (-1)    inf      0     matriz) ) --baixo para cima
+
+tahOk :: Int -> Int -> [Int] -> Bool
+tahOk x y m = (vejoCerto x y m) && (not (jaTemNaLinha (getxym x y m) x y m) ) && (not (jaTemNaColuna (getxym x y m) x y m) )
+
+nextX :: Int -> Int
+nextX x =
+  if x >= (tam-2) then
+    1
+  else
+    x+1
+
+nextY :: Int -> Int -> Int
+nextY x y
+  | x >= (tam-2) && y <= tam-3 = y+1
+  | x >= (tam-2) && y > tam-3 = -1 --isso deve ser gatilho para encerrar a execução
+  | otherwise = y
+
+--resolve x y m =
+--  | tahOk
+
 main = do
   putStr( (showMatriz 0 0 matriz) )
   print( (jaTemNaColuna 0 0 0 matriz) )
-  --print( (quantosVejoEsqParaDir 1 2 0 0 matriz))
-  print( (quantosVejoDirParaEsq (tam-2) 1 0 0 matriz))
-  putStr( (showMatriz 0 0 (setXY 5 3 1 matriz) ) )
+  print( (tahOk 1 2 matriz) )
+  --print( (vejoCerto 2 1 matriz) )
+  --testaQtd 2 1 matriz
