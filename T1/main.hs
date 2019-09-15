@@ -20,22 +20,24 @@ _  1 2 _
 -}
 
 
-{-
+{-}
 possiveis = [1]
 maiorPossivel = 1
-matriz = [0, 1, 0, o programa resolveu essa matriz corretamente
-          1, 0, 1,
+matriz = [0, 1, 0, --o programa resolveu essa matriz corretamente
+          1, 1, 1,
           0, 1, 0]
--}
 
-{-
+
+
 possiveis = [1,2]
 maiorPossivel = 2
-matriz = [0, 2, 1, 0, o programa resolveu essa matriz corretamente
-          2, 0, 0, 1,
-          1, 0, 0, 2,
+matriz = [0, 2, 1, 0, --o programa resolveu essa matriz corretamente
+          2, 1, 2, 1,
+          1, 2, 1, 2,
           0, 1, 2, 0]
 -}
+
+
 
 possiveis = [1,2,3]
 maiorPossivel = 3
@@ -184,18 +186,19 @@ zeros :: [Int] -> [Int]
 zeros [] = []
 zeros (a:b) = [0] ++ (zeros b)
 
-resolve :: Int -> Int -> [Int] -> [Int] -> [Int]
-resolve x y m v
+resolve :: Int-> Int -> Int -> [Int] -> [Int] -> [Int]
+resolve k x y m v
+  | k <=0 = v
   | y < 0 = m -- foi sinalizado y = -1 -> encerrar execução
     --tudo certo, vamo pro proximo
-  | tahOk x y (setXY (possiveis!!(getxym x y v)) x y m ) =
-    resolve (nextX x) (nextY x y) (setXY (possiveis!!(getxym x y v)) x y m ) (setXY ((getxym x y v) +1) x y v )
     -- nenhum encaixa aki, mude o anterior
-  | (getxym x y m) > maiorPossivel =
-    resolve (backX x) (backY x y)          (setXY 0 x y m)                 (setXY 0 x y v)
+  | (getxym x y v) >= maiorPossivel =
+    resolve (k-1) (backX x) (backY x y)          (setXY 0 x y m)                 (setXY 0 x y v)
+  | tahOk x y (setXY (possiveis!!(getxym x y v)) x y m ) =
+    resolve (k-1) (nextX x) (nextY x y) (setXY (possiveis!!(getxym x y v)) x y m ) (setXY ((getxym x y v) +1) x y v )
     -- tenta o proximo numero aki
-  | not (tahOk x y (setXY (possiveis!!(getxym x y v)) x y m )) =
-    resolve     x         y                          m                   (setXY (( (getxym x y v) +1) ) x y v )
+  | otherwise = --not (tahOk x y (setXY (possiveis!!(getxym x y v)) x y m )) =
+    resolve (k-1)    x         y                          m                   (setXY (( (getxym x y v) +1) ) x y v )
 
 testahOk :: Int->Int->[Int]->IO ()
 testahOk x y m = do
@@ -206,12 +209,28 @@ testahOk x y m = do
 
 main = do
   putStr( (showMatriz 0 0 matriz) )
-  --print( tahOk 2 1 matriz )
-  --testahOk 2 1 matriz
+  --print( tahOk 2 2 matriz )
+  --testahOk 2 2 matriz
   --putStr( (showMatriz 0 0 (setXY (possiveis!!(getxym 1 1 (zeros matriz))) 1 1 matriz )) )
   --print( (possiveis!!(getxym 1 1 (zeros matriz))) )
   --print( (tahOk 1 1 (setXY (possiveis!!(getxym 1 1 (zeros matriz))) 1 1 matriz ) ) )
-  putStr( (showMatriz 0 0 (resolve 1 1 matriz (zeros matriz) ) ) )
+
+  putStr("\n")
+  putStr( (showMatriz 0 0 (resolve 11 1 1 matriz (zeros matriz) ) ) )
+  putStr("\n")
+  putStr( (showMatriz 0 0 (resolve 12 1 1 matriz (zeros matriz) ) ) )
+  putStr("\n")
+  putStr( (showMatriz 0 0 (resolve 13 1 1 matriz (zeros matriz) ) ) )
+  putStr("\n")
+  putStr( (showMatriz 0 0 (resolve 14 1 1 matriz (zeros matriz) ) ) )
+  putStr("\n")
+  putStr( (showMatriz 0 0 (resolve 15 1 1 matriz (zeros matriz) ) ) )
+  putStr("\n")
+  putStr( (showMatriz 0 0 (resolve 16 1 1 matriz (zeros matriz) ) ) )
+  putStr("\n")
+  putStr( (showMatriz 0 0 (resolve 17 1 1 matriz (zeros matriz) ) ) )
+  putStr("\n")
+  putStr( (showMatriz 0 0 (resolve 18 1 1 matriz (zeros matriz) ) ) )
 
   --print( (vejoCerto 2 1 matriz) )
   --testaQtd 2 1 matriz
