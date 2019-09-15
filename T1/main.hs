@@ -41,7 +41,7 @@ matriz = [0, 2, 1, 0, --o programa resolveu essa matriz corretamente
 
 possiveis = [1,2,3]
 maiorPossivel = 3
-matriz = [0, 2, 2, 1, 0, -- dando erro "index to large"
+matriz = [0, 2, 2, 1, 0, -- resolvei essa matriz corretamente!
           3, 0, 0, 0, 1,
           1, 0, 0, 0, 2,
           2, 0, 0, 0, 3,
@@ -142,9 +142,11 @@ quantosVejo x y iter maiorVisto deslocX deslocY limX limY m
 vejoCerto :: Int -> Int -> [Int] -> Bool
 vejoCerto x y m =
   ((getxym    0       y    m) >= quantosVejo    1       y    0 0   1    0   (tam-1)   inf    m) && --esqParaDir
-  ((getxym (tam-1)    y    m) >= quantosVejo (tam-2)    y    0 0 (-1)   0      0      inf    m) && --dirParaEsq
+  --dirParaEsq -- equivalenca ( se p -> q) para (not p || q), ou seja, se x==tam-1 então linha deve ser valida. pois antes nao dah pra saber ao certo
+  ( ( not (x == (tam-1)) ) || ((getxym (tam-1)    y    m) >= quantosVejo (tam-2)    y    0 0 (-1)   0      0      inf    m) ) &&
   ((getxym    x       0    m) >= quantosVejo    x       1    0 0   0    1     inf   (tam-1)  m) && --cimaParaBaixo
-  ((getxym    x    (tam-1) m) >= quantosVejo    x    (tam-2) 0 0   0  (-1)    inf      0     m) --baixoPraCima
+  --baixoPraCima equivalencia tambem.. se y==tam-1 então verificar de baixo pra cima
+  (( not (y == (tam-1)) ) || ((getxym    x    (tam-1) m) >= quantosVejo    x    (tam-2) 0 0   0  (-1)    inf      0     m) )
 
 testaQtd :: Int->Int->[Int]->IO ()
 testaQtd x y m = do
@@ -214,7 +216,9 @@ main = do
   --putStr( (showMatriz 0 0 (setXY (possiveis!!(getxym 1 1 (zeros matriz))) 1 1 matriz )) )
   --print( (possiveis!!(getxym 1 1 (zeros matriz))) )
   --print( (tahOk 1 1 (setXY (possiveis!!(getxym 1 1 (zeros matriz))) 1 1 matriz ) ) )
-
+  putStr("\n")
+  putStr( (showMatriz 0 0 (resolve 200 1 1 matriz (zeros matriz) ) ) )
+{-}
   putStr("\n")
   putStr( (showMatriz 0 0 (resolve 11 1 1 matriz (zeros matriz) ) ) )
   putStr("\n")
@@ -231,6 +235,6 @@ main = do
   putStr( (showMatriz 0 0 (resolve 17 1 1 matriz (zeros matriz) ) ) )
   putStr("\n")
   putStr( (showMatriz 0 0 (resolve 18 1 1 matriz (zeros matriz) ) ) )
-
+-}
   --print( (vejoCerto 2 1 matriz) )
   --testaQtd 2 1 matriz
