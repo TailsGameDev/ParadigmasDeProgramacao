@@ -19,19 +19,40 @@ _  1 2 _
    _ _
 -}
 
+
+{-
+possiveis = [1]
+maiorPossivel = 1
+matriz = [0, 1, 0, o programa resolveu essa matriz corretamente
+          1, 0, 1,
+          0, 1, 0]
+-}
+
+{-
 possiveis = [1,2]
-
-
-matriz = [0, 2, 1, 0,
-          2, 2, 1, 1,
+maiorPossivel = 2
+matriz = [0, 2, 1, 0, o programa resolveu essa matriz corretamente
+          2, 0, 0, 1,
           1, 0, 0, 2,
           0, 1, 2, 0]
+-}
+
+possiveis = [1,2,3]
+maiorPossivel = 3
+matriz = [0, 2, 2, 1, 0, -- dando erro "index to large"
+          3, 0, 0, 0, 1,
+          1, 0, 0, 0, 2,
+          2, 0, 0, 0, 3,
+          0, 2, 1, 3, 0]
+
 {-
-matriz = [0, 0, 0, 0, 0,
-          0, 1, 2, 3, 0,
-          0, 3, 1, 2, 0,
-          0, 2, 3, 1, 0,
-          0, 0, 0, 0, 0]
+possiveis = [1,2,3]
+maiorPossivel = 3
+matriz = [0, 2, 2, 1, 0,
+          3, 1, 2, 3, 1,
+          1, 3, 1, 2, 2,
+          2, 2, 3, 1, 3,
+          0, 2, 1, 3, 0]
 -}
 tam = tamanhoLinha matriz
 
@@ -131,7 +152,14 @@ testaQtd x y m = do
   putStr( "\nbaixo p/ cima:"++show(quantosVejo    x    (tam-2) 0 0   0  (-1)    inf      0     matriz) ) --baixo para cima
 
 tahOk :: Int -> Int -> [Int] -> Bool
-tahOk x y m = (vejoCerto x y m) && (not (jaTemNaLinha (getxym x y m) x y m) ) && (not (jaTemNaColuna (getxym x y m) x y m) )
+tahOk x y m = (vejoCerto x y m) && (not (jaTemNaLinha (getxym x y m) 1 y (setXY 0 x y m) ) ) && (not (jaTemNaColuna (getxym x y m) x 1 (setXY 0 x y m)) )
+
+backX :: Int -> Int
+backX x =
+  if x <= 1 then
+    tam-2
+  else
+    x-1
 
 nextX :: Int -> Int
 nextX x =
@@ -140,18 +168,50 @@ nextX x =
   else
     x+1
 
+backY :: Int -> Int -> Int
+backY x y
+  | x <= 1 && y >= 2 = y-1
+  | x <= 1 && y < 2 = -1 --isso seria um erro: quer voltar mas tah no inicio
+  | otherwise = y
+
 nextY :: Int -> Int -> Int
 nextY x y
   | x >= (tam-2) && y <= tam-3 = y+1
   | x >= (tam-2) && y > tam-3 = -1 --isso deve ser gatilho para encerrar a execução
   | otherwise = y
 
---resolve x y m =
---  | tahOk
+zeros :: [Int] -> [Int]
+zeros [] = []
+zeros (a:b) = [0] ++ (zeros b)
+
+resolve :: Int -> Int -> [Int] -> [Int] -> [Int]
+resolve x y m v
+  | y < 0 = m -- foi sinalizado y = -1 -> encerrar execução
+    --tudo certo, vamo pro proximo
+  | tahOk x y (setXY (possiveis!!(getxym x y v)) x y m ) =
+    resolve (nextX x) (nextY x y) (setXY (possiveis!!(getxym x y v)) x y m ) (setXY ((getxym x y v) +1) x y v )
+    -- nenhum encaixa aki, mude o anterior
+  | (getxym x y m) > maiorPossivel =
+    resolve (backX x) (backY x y)          (setXY 0 x y m)                 (setXY 0 x y v)
+    -- tenta o proximo numero aki
+  | not (tahOk x y (setXY (possiveis!!(getxym x y v)) x y m )) =
+    resolve     x         y                          m                   (setXY (( (getxym x y v) +1) ) x y v )
+
+testahOk :: Int->Int->[Int]->IO ()
+testahOk x y m = do
+  putStr( "\nvejo certo:"++   show(vejoCerto x y m) )
+  putStr( "\njah tem na linha:"++    show( (jaTemNaLinha (getxym x y m) 1 y (setXY 0 x y m) ) ) )
+  putStr( "\njah tem na coluna:"++   show( (jaTemNaColuna (getxym x y m) x 1 (setXY 0 x y m)) ) )
+
 
 main = do
   putStr( (showMatriz 0 0 matriz) )
-  print( (jaTemNaColuna 0 0 0 matriz) )
-  print( (tahOk 1 2 matriz) )
+  --print( tahOk 2 1 matriz )
+  --testahOk 2 1 matriz
+  --putStr( (showMatriz 0 0 (setXY (possiveis!!(getxym 1 1 (zeros matriz))) 1 1 matriz )) )
+  --print( (possiveis!!(getxym 1 1 (zeros matriz))) )
+  --print( (tahOk 1 1 (setXY (possiveis!!(getxym 1 1 (zeros matriz))) 1 1 matriz ) ) )
+  putStr( (showMatriz 0 0 (resolve 1 1 matriz (zeros matriz) ) ) )
+
   --print( (vejoCerto 2 1 matriz) )
   --testaQtd 2 1 matriz
