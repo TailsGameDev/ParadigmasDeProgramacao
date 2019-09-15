@@ -38,22 +38,30 @@ matriz = [0, 2, 1, 0, --o programa resolveu essa matriz corretamente
           1, 2, 1, 2,
           0, 1, 2, 0]
 
-
-possiveis = [1,2]
-maiorPossivel = 2
-matriz = [0, 2, 1, 0, --o programa resolveu essa matriz corretamente
-          2, o, o, 1,
-          1, o, o, 2,
-          0, 1, 2, 0]
 -}
+p1 = [1,2]
+m1 = [0, 2, 1, 0,
+      2, o, o, 1,
+      1, o, o, 2,
+      0, 1, 2, 0]
+r1 = [0, 2, 1, 0,
+      2, 1, 2, 1,
+      1, 2, 1, 2,
+      0, 1, 2, 0]
 
-possiveis = [1,2]
-maiorPossivel = 2
-matriz = [0, 1, 2, 0, --o programa resolveu essa matriz corretamente
+
+{-}
+p1 = [1,2]
+mp1 = 2
+m1 = [0, 1, 2, 0, --o programa resolveu essa matriz corretamente
       1, o, o, 2,
       2, o, o, 1,
       0, 2, 1, 0]
+-}
 
+--maior possivel!!
+mp :: [Int] -> Int
+mp p = p!!( (length p) -1)
 
 {-}
 matriz = [0, 1, 2, 0, --o programa resolveu essa matriz corretamente
@@ -88,7 +96,8 @@ matriz = [0, 2, 2, 1, 2, 0, -- essa matriz ele deixa tudo zero
           1, o, o, o, o, 3,
           0, 1, 2, 3, 1, 0]
 -}
-tam = tamanhoLinha matriz
+--tam = tamanhoLinha matriz
+tam m = tamanhoLinha m
 
 infinito = 999999999
 inf = infinito
@@ -98,12 +107,12 @@ tamanhoLinha :: [Int] -> Int -- eh soh uma raiz quadrada devolvendo Int
 tamanhoLinha matrix = round (fromIntegral(length matrix) **0.5)
 
 getxym :: Int -> Int -> [Int] -> Int
-getxym x y m = m !! (x + y*(tam))
+getxym x y m = m !! (x + y*(tam m))
 
 --           x     y     matriz
 getLinha :: Int -> Int -> [Int] -> String
 getLinha x y m =
-  if (x >= (tam) -1) then
+  if (x >= (tam m) -1) then
     " " ++ show ( getxym x y m )
   else
     if ( getxym x y m ) < 0 then
@@ -113,7 +122,7 @@ getLinha x y m =
 --           x     y     matriz
 showMatriz :: Int-> Int-> [Int] -> String
 showMatriz x y m =
-  if (y >= tam-1) then
+  if (y >= (tam m)-1) then
     (getLinha x y m) ++ "\n"
   else
     (getLinha x y m) ++ "\n" ++ (showMatriz x (y+1) m)
@@ -121,7 +130,7 @@ showMatriz x y m =
 --              n      x      y      matriz   tem?
 jaTemNaLinha :: Int -> Int -> Int -> [Int] -> Bool
 jaTemNaLinha n x y m =
-  if x >= ( (tam) -1) then
+  if x >= ( (tam m) -1) then
     False
   else
     if n == getxym x y m then
@@ -131,7 +140,7 @@ jaTemNaLinha n x y m =
 
 jaTemNaColuna :: Int -> Int -> Int -> [Int] -> Bool
 jaTemNaColuna n x y m =
-  if y >= ( tam -1) then
+  if y >= ( (tam m) -1) then
     False
   else
     if n == getxym x y m then
@@ -155,7 +164,7 @@ insereNaPosicao num i pos (a:b) =
     [a] ++ (insereNaPosicao num (i+1) pos b)
 
 setXY :: Int -> Int -> Int -> [Int] -> [Int]
-setXY num x y m = insereNaPosicao num 0 (x+y*tam) (removeDaPosicao 0 (x+y*tam) m)
+setXY num x y m = insereNaPosicao num 0 (x+y*(tam m)) (removeDaPosicao 0 (x+y*(tam m)) m)
 
 --iter guarda quantos foram vistos
 --A funcao eh pensada para percorrer uma linha ou uma coluna no sentido
@@ -175,35 +184,35 @@ quantosVejo x y iter maiorVisto deslocX deslocY limX limY m
 
 vejoCerto :: Int -> Int -> [Int] -> Bool
 vejoCerto x y m =
-  ((getxym    0       y    m) >= quantosVejo    1       y    0 0   1    0   (tam-1)   inf    m) && --esqParaDir
+  ((getxym    0       y    m) >= quantosVejo    1       y    0 0   1    0   ((tam m)-1)   inf    m) && --esqParaDir
   --dirParaEsq -- equivalenca ( se p -> q) para (not p || q), ou seja, se x==tam-1 então linha deve ser valida. pois antes nao dah pra saber ao certo
-  ( ( not (x == (tam-2)) ) || ((getxym (tam-1)    y    m) >= quantosVejo (tam-2)    y    0 0 (-1)   0      0      inf    m) ) &&
-  ((getxym    x       0    m) >= quantosVejo    x       1    0 0   0    1     inf   (tam-1)  m) && --cimaParaBaixo
+  ( ( not (x == ((tam m)-2)) ) || ((getxym ((tam m)-1)    y    m) >= quantosVejo ((tam m)-2)    y    0 0 (-1)   0      0      inf    m) ) &&
+  ((getxym    x       0    m) >= quantosVejo    x       1    0 0   0    1     inf   ((tam m)-1)  m) && --cimaParaBaixo
   --baixoPraCima equivalencia tambem.. se y==tam-1 então verificar de baixo pra cima
-  (( not (y == (tam-2)) ) || ((getxym    x    (tam-1) m) >= quantosVejo    x    (tam-2) 0 0   0  (-1)    inf      0     m) )
+  (( not (y == ((tam m)-2)) ) || ((getxym    x    ((tam m)-1) m) >= quantosVejo    x    ((tam m)-2) 0 0   0  (-1)    inf      0     m) )
 
 testaQtd :: Int->Int->[Int]->IO ()
 testaQtd x y m = do
-  putStr( "\nesq p/ dir:"++   show(quantosVejo    1       y    0 0   1    0   (tam-1)   inf    matriz) ) --esq para dir
-  putStr( "\ndir p/ esq:"++   show(quantosVejo (tam-2)    y    0 0 (-1)   0      0      inf    matriz) ) --dir para esq
-  putStr( "\ncima p/ baixo:"++show(quantosVejo    x       1    0 0   0    1     inf   (tam-1)  matriz) ) --cima para baixo
-  putStr( "\nbaixo p/ cima:"++show(quantosVejo    x    (tam-2) 0 0   0  (-1)    inf      0     matriz) ) --baixo para cima
+  putStr( "\nesq p/ dir:"++   show(quantosVejo    1       y    0 0   1    0   ((tam m)-1)   inf    m) ) --esq para dir
+  putStr( "\ndir p/ esq:"++   show(quantosVejo ((tam m)-2)    y    0 0 (-1)   0      0      inf    m) ) --dir para esq
+  putStr( "\ncima p/ baixo:"++show(quantosVejo    x       1    0 0   0    1     inf   ((tam m)-1)  m) ) --cima para baixo
+  putStr( "\nbaixo p/ cima:"++show(quantosVejo    x    ((tam m)-2) 0 0   0  (-1)    inf      0     m) ) --baixo para cima
 
 tahOk :: Int -> Int -> [Int] -> Bool
 tahOk x y m = (vejoCerto x y m) && (not (jaTemNaLinha (getxym x y m) 1 y (setXY (o) x y m) ) ) && (not (jaTemNaColuna (getxym x y m) x 1 (setXY (o) x y m)) )
 -- esse set de -1 eh porque se jah tiver o numero desejado na posição, ele vai considerar uma repetição.
 -- Então temos que passar uma matriz que não tem o numero desejado na posição alvo
 
-backX :: Int -> Int
-backX x =
+backX :: Int -> [Int]-> Int
+backX x m =
   if x <= 1 then
-    tam-2
+    (tam m)-2
   else
     x-1
 
-nextX :: Int -> Int
-nextX x =
-  if x >= (tam-2) then
+nextX :: Int -> [Int]-> Int
+nextX x m =
+  if x >= ((tam m)-2) then
     1
   else
     x+1
@@ -214,51 +223,58 @@ backY x y
   | x <= 1 && y < 2 = -1 --isso seria um erro: quer voltar mas tah no inicio
   | otherwise = y
 
-nextY :: Int -> Int -> Int
-nextY x y
-  | x >= (tam-2) && y <= tam-3 = y+1
-  | x >= (tam-2) && y > tam-3 = -1 --isso deve ser gatilho para encerrar a execução
+nextY :: Int -> Int -> [Int] -> Int
+nextY x y m
+  | x >= ((tam m)-2) && y <= (tam m)-3 = y+1
+  | x >= ((tam m)-2) && y > (tam m)-3 = -1 --isso deve ser gatilho para encerrar a execução
   | otherwise = y
 
 zeros :: [Int] -> [Int]
 zeros [] = []
 zeros (a:b) = [0] ++ (zeros b)
 
-resolve :: Int-> Int -> Int -> [Int] -> [Int] -> [Int]
-resolve k x y m v
+resolve :: Int-> Int -> Int -> [Int] -> [Int] -> [Int] -> [Int]
+resolve k x y m v p -- k= limiteDaRecursao, x, y, m, v=matrizGuardaIndexNoVetorDePossiveis, p=listaDeNumerosPossiveis[100% constante]
   | k <=0 = v
   | y < 0 = m -- foi sinalizado y = -1 -> encerrar execução .. na vdd nao tah parando mas era a ideia
     --tudo certo, vamo pro proximo
     -- nenhum encaixa aki, mude o anterior
-  | (getxym x y m) >= maiorPossivel =
-    resolve (k-1) (backX x) (backY x y)          (setXY o x y m)                 (setXY 0 x y v)
+  | (getxym x y m) >= (mp p) = --mp pega o ultimo elemento -> o maior possível
+    resolve (k-1) (backX x m) (backY x y)          (setXY o x y m)                 (setXY 0 x y v) p
   --tudo certo, substitui e bola pra frente
-  | tahOk x y (setXY (possiveis!!(getxym x y v)) x y m ) =
-    resolve (k-1) (nextX x) (nextY x y) (setXY (possiveis!!(getxym x y v)) x y m ) (setXY ((getxym x y v) +1) x y v )
+  | tahOk x y (setXY (p!!(getxym x y v)) x y m ) =
+    resolve (k-1) (nextX x m) (nextY x y m) (setXY (p!!(getxym x y v)) x y m ) (setXY ((getxym x y v) +1) x y v ) p
     -- tenta o proximo numero aki
-  | not (tahOk x y (setXY (possiveis!!(getxym x y v)) x y m )) =
-    resolve (k-1)    x         y        (setXY (possiveis!!(getxym x y v)) x y m ) (setXY (( (getxym x y v) +1) ) x y v )
+  | not (tahOk x y (setXY (p!!(getxym x y v)) x y m )) =
+    resolve (k-1)    x         y        (setXY (p!!(getxym x y v)) x y m ) (setXY (( (getxym x y v) +1) ) x y v ) p
 
 testahOk :: Int->Int->[Int]->IO ()
 testahOk x y m = do
   putStr( "numero: "++show(getxym x y m)++" posicao: ("++show(x)++","++show(y)++")\n")
-  putStr( "tahOk: " ++ show(tahOk 2 1 matriz) )
+  putStr( "tahOk: " ++ show(tahOk 2 1 m) )
   putStr( "\nvejo certo:"++   show(vejoCerto x y m) )
-  -- esse set de -1 eh porque se jah tiver o numero desejado na posição, ele vai considerar uma repetição.
+  -- esse set de -1(o) eh porque se jah tiver o numero desejado na posição, ele vai considerar uma repetição.
   -- Então temos que passar uma matriz que não tem o numero desejado na posição alvo
   putStr( "\njah tem na linha:"++    show( (jaTemNaLinha (getxym x y m) 1 y (setXY (o) x y m) ) ) )
   putStr( "\njah tem na coluna:"++   show( (jaTemNaColuna (getxym x y m) x 1 (setXY (o) x y m)) ) )
 
 
-resolveEntre :: Int->Int-> IO ()
-resolveEntre ini fim = forM_ [ini..fim] $ \i ->
-         putStrLn ("step " ++ show i ++"\n"++(showMatriz 0 0 (resolve i 1 1 matriz (zeros matriz) ) ))
+resolveEntre :: Int->Int->[Int]->[Int]-> IO ()
+resolveEntre ini fim p m = forM_ [ini..fim] $ \i ->
+         putStrLn ("step " ++ show i ++"\n"++(showMatriz 0 0 (resolve i 1 1 m (zeros m) p) ))
+
+lim = 5000 -- limite da recursão
+
+--resolvida retorna a matriz resolvida (ou tenta)
+resolvida :: [Int] -> [Int] -> [Int]
+resolvida p m = (resolve lim 1 1 m (zeros m) p)
 
 main = do
-  putStr( (showMatriz 0 0 matriz) )
+  putStr("Assert resolve m1: " ++ show( resolvida p1 m1 == r1 )++"\n")
+  --putStr( (showMatriz 0 0 m1) )
   --print( (possiveis!!(getxym 1 1 (zeros matriz) )) )
-  --resolveEntre 10000 10000
-  resolveEntre 1 10
+  --resolveEntre 10000 10000 p1 m1
+  --resolveEntre 1 10
   --testahOk 2 1 matriz
   --putStr( (showMatriz 0 0 (setXY (possiveis!!(getxym 1 1 (zeros matriz))) 1 1 matriz )) )
   --print( (possiveis!!(getxym 1 1 (zeros matriz))) )
