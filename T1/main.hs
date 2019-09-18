@@ -81,6 +81,45 @@ r4 = [0, 2, 2, 1, 2, 0,
       1, 3, 2, 1, 0, 3,
       0, 1, 2, 3, 1, 0]
 
+p5 = [1,2,3,4,5]
+m5 = [0, w, 3, 3, 2, 0, 0,
+      1, o, o, o, o, o, 3,
+      4, o, o, o, o, o, 2,
+      3, o, o, o, o, o, 3,
+      2, o, o, o, o, o, w,
+      w, o, o, o, o, o, 1,
+      0, w, 2, 2, 2, 1, 0]
+r5 = [0, w, 3, 3, 2, 0, 0,
+      2, 5, 3, 1, 4, 5, 3,
+      2, 1, 2, 3, 5, 4, 2,
+      3, 3, 4, 5, 2, 1, 3,
+      1, 4, 5, 2, 1, 3, w,
+      1, 2, 1, 4, 3, 5, 1,
+      0, 1, 2, 3, 1, 0, 0]
+
+
+--w = 9 -- eh um numero grande pra ser qd nao tem requisito do lado
+
+p7 = [1,2,3,4,5,6,7]
+m7 = [0, w, 3, w, 4, 2, 4, w, 0,
+      w, o, o, o, o, o, o, o, 3,
+      w, o, o, o, o, o, o, o, 2,
+      3, o, o, o, o, o, o, o, 5,
+      5, o, o, o, o, o, o, o, w,
+      4, o, o, o, o, o, o, o, w,
+      w, o, o, o, o, o, o, o, 5,
+      w, o, o, o, o, o, o, o, 4,
+      0, 3, w, 3, w, 4, 3, 4, 0]
+r7 = [0, w, 3, w, 4, 2, 4, w, 0,
+      w, 7, 4, 3, 2, 6, 1, 5, 3,
+      w, 4, 1, 2, 3, 7, 5, 6, 2,
+      3, 1, 2, 7, 6, 5, 4, 3, 5,
+      5, 2, 3, 5, 4, 1, 6, 7, w,
+      4, 3, 5, 6, 1, 2, 7, 4, w,
+      w, 6, 7, 1, 5, 4, 3, 2, 5,
+      w, 5, 6, 4, 7, 3, 2, 1, 4,
+      0, 3, w, 3, w, 4, 3, 4, 0]
+
 --tam = tamanhoLinha matriz
 tam m = tamanhoLinha m
 
@@ -90,7 +129,7 @@ mp p = p!!( (length p) -1)
 
 infinito = 999999999
 inf = infinito
-w = infinito
+w = 9
 
 tamanhoLinha :: [Int] -> Int -- eh soh uma raiz quadrada devolvendo Int
 tamanhoLinha matrix = round (fromIntegral(length matrix) **0.5)
@@ -231,7 +270,7 @@ zeros (a:b) = [0] ++ (zeros b)
 
 resolve :: Int-> Int -> Int -> [Int] -> [Int] -> [Int] -> [Int]
 resolve k x y m v p -- k= limiteDaRecursao, x, y, m, v=matrizGuardaIndexNoVetorDePossiveis, p=listaDeNumerosPossiveis[100% constante]
-  | k <=0 = v
+  | k <=0 = m -- ESCOLHA AQUI v OU m
   | y < 0 = m -- foi sinalizado y = -1 -> encerrar execução .. na vdd nao tah parando mas era a ideia
     --tudo certo, vamo pro proximo
     -- nenhum encaixa aki, mude o anterior
@@ -259,7 +298,7 @@ resolveEntre :: Int->Int->[Int]->[Int]-> IO ()
 resolveEntre ini fim p m = forM_ [ini..fim] $ \i ->
          putStrLn ("step " ++ show i ++"\n"++(showMatriz 0 0 (resolve i 1 1 m (zeros m) p) ))
 
-lim = 5000 -- limite da recursão
+lim = 500000 -- limite da recursão
 
 --resolvida retorna a matriz resolvida (ou tenta)
 resolvida :: [Int] -> [Int] -> [Int]
@@ -271,6 +310,10 @@ main = do
   putStr("Assert resolve m2: " ++ show( resolvida p2 m2 == r2 )++"\n")
   putStr("Assert resolve m3: " ++ show( resolvida p3 m3 == r3 )++"\n")
   putStr("Assert resolve m4: " ++ show( resolvida p4 m4 == r4 )++"\n")
+  putStr("Assert resolve m5: " ++ show( resolvida p5 m5 == r5 )++"\n")
+  resolveEntre 0 50 p5 m5
+  --resolveEntre 10000000 10000000 p7 m7
+
   --putStr( "inicial: \n"++(showMatriz 0 0 m3) )
   --putStr( "\nresult: \n"++(showMatriz 0 0 r3) )
   --resolveEntre 20 30 p3 m3
