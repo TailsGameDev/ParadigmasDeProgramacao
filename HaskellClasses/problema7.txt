@@ -1,0 +1,24 @@
+Pesquise sobre a linguagem O’Haskell.  O que  ́e e qual sua diferen ̧ca em
+rela ̧c ̃ao ao Haskell?
+
+O'Haskell is
+
+   the purely functional language Haskell, conservatively extended with
+       subtyping
+       monadic objects
+   an object-oriented imperative language, enhanced with
+       parameteric polymorphism
+       automatic type inference
+   a concurrent language, with
+       a reactive communication model
+       asynchronous and synchronous message-passing
+
+Traduzindo manualmente o que entendi:
+
+O'Haskell é a linguagem Haskell, puramente funcional, extendida com subtyping e
+monadic objects.
+
+É também uma linguagem orientada a objetos, imperativa, com polimorfismo
+paramétrico, e inferência de tipo automática.
+
+Também é uma linguagem concorrente, que passa mensagens síncronas e assíncronas
