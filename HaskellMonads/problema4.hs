@@ -24,6 +24,19 @@ posValida lt n =
   if n >= (length lt-1) then
     True
   else
+    if ( movValido (lt!!(n-1)) (lt!!(n)) ) == False then
+      False
+    else
+      posValida lt (n+1)
 
 
 calcPosicaoFinal ::  [(Int, Int)] -> Maybe (Int, Int)
+calcPosicaoFinal lt =
+  if (posValida lt 1) == True then
+    Just (lt!!( (length lt)-1 ))
+  else
+    Nothing
+
+main = do
+  print ( (calcPosicaoFinal [(1,0), (2,2), (0,3), (2,4)]) )
+  print ( (calcPosicaoFinal  [(1,0), (3,2), (0,3), (2,4)] )  )

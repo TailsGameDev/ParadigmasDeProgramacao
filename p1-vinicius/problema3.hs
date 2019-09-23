@@ -87,9 +87,13 @@ semRepetidos (a:b) =
   else
     [a] ++ semRepetidos b
 
+repetElem :: Arvore -> Int -> [Int] -> Int -> Int
+repetElem arv num (a:b) itera = veSeRepeteNVezes arv num 
 
---elementosRepetidos :: Arvore -> Int -> Int
---elementosRepetidos
+
+
+elementosRepetidos :: Arvore -> Int -> Int
+elementosRepetidos
 
 
 ----------------- final  3C ------------------------
