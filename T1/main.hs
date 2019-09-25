@@ -82,43 +82,61 @@ r4 = [0, 2, 2, 1, 2, 0,
       0, 1, 2, 3, 1, 0]
 
 p5 = [1,2,3,4,5]
-m5 = [0, w, 3, 3, 2, 0, 0,
+m5 = [0, e, 3, 3, e, e, 0,
       1, o, o, o, o, o, 3,
       4, o, o, o, o, o, 2,
       3, o, o, o, o, o, 3,
-      2, o, o, o, o, o, w,
-      w, o, o, o, o, o, 1,
-      0, w, 2, 2, 2, 1, 0]
-r5 = [0, w, 3, 3, 2, 0, 0,
-      2, 5, 3, 1, 4, 5, 3,
-      2, 1, 2, 3, 5, 4, 2,
+      2, o, o, o, o, o, e,
+      e, o, o, o, o, o, 1,
+      0, e, 2, 2, 2, 1, 0]
+
+r5 = [0, e, 3, 3, e, e, 0,
+      1, 5, 3, 1, 4, 2, 3,
+      4, 1, 2, 3, 5, 4, 2,
       3, 3, 4, 5, 2, 1, 3,
-      1, 4, 5, 2, 1, 3, w,
-      1, 2, 1, 4, 3, 5, 1,
-      0, 1, 2, 3, 1, 0, 0]
+      2, 4, 5, 2, 1, 3, e,
+      e, 2, 1, 4, 3, 5, 1,
+      0, e, 2, 2, 2, 1, 0]
+
+p6 = [1,2,3,4,5]
+m6 = [0, 1, 3, 3, 2, 3, 0,
+      1, o, o, o, o, o, 3,
+      4, o, o, o, o, o, 2,
+      3, o, o, o, o, o, 3,
+      2, o, o, o, o, o, 2,
+      3, o, o, o, o, o, 1,
+      0, 3, 2, 2, 2, 1, 0]
+
+r6 = [0, 1, 3, 3, 2, 3, 0,
+      1, 5, 3, 1, 4, 2, 3,
+      4, 1, 2, 3, 5, 4, 2,
+      3, 3, 4, 5, 2, 1, 3,
+      2, 4, 5, 2, 1, 3, 2,
+      3, 2, 1, 4, 3, 5, 1,
+      0, 3, 2, 2, 2, 1, 0]
 
 
 --w = 9 -- eh um numero grande pra ser qd nao tem requisito do lado
 
 p7 = [1,2,3,4,5,6,7]
-m7 = [0, w, 3, w, 4, 2, 4, w, 0,
-      w, o, o, o, o, o, o, o, 3,
-      w, o, o, o, o, o, o, o, 2,
+m7 = [0, e, 3, e, 4, 2, 4, e, 0,
+      e, o, o, o, o, o, o, o, 3,
+      e, o, o, o, o, o, o, o, 2,
       3, o, o, o, o, o, o, o, 5,
-      5, o, o, o, o, o, o, o, w,
-      4, o, o, o, o, o, o, o, w,
-      w, o, o, o, o, o, o, o, 5,
-      w, o, o, o, o, o, o, o, 4,
-      0, 3, w, 3, w, 4, 3, 4, 0]
-r7 = [0, w, 3, w, 4, 2, 4, w, 0,
-      w, 7, 4, 3, 2, 6, 1, 5, 3,
-      w, 4, 1, 2, 3, 7, 5, 6, 2,
+      5, o, o, o, o, o, o, o, e,
+      4, o, o, o, o, o, o, o, e,
+      e, o, o, o, o, o, o, o, 5,
+      e, o, o, o, o, o, o, o, 4,
+      0, 3, e, 3, e, 4, 3, 4, 0]
+r7 = [0, e, 3, e, 4, 2, 4, e, 0,
+      e, 7, 4, 3, 2, 6, 1, 5, 3,
+      e, 4, 1, 2, 3, 7, 5, 6, 2,
       3, 1, 2, 7, 6, 5, 4, 3, 5,
-      5, 2, 3, 5, 4, 1, 6, 7, w,
-      4, 3, 5, 6, 1, 2, 7, 4, w,
-      w, 6, 7, 1, 5, 4, 3, 2, 5,
-      w, 5, 6, 4, 7, 3, 2, 1, 4,
-      0, 3, w, 3, w, 4, 3, 4, 0]
+      5, 2, 3, 5, 4, 1, 6, 7, e,
+      4, 3, 5, 6, 1, 2, 7, 4, e,
+      e, 6, 7, 1, 5, 4, 3, 2, 5,
+      e, 5, 6, 4, 7, 3, 2, 1, 4,
+      0, 3, e, 3, e, 4, 3, 4, 0]
 
 --tam = tamanhoLinha matriz
 tam m = tamanhoLinha m
@@ -129,7 +147,8 @@ mp p = p!!( (length p) -1)
 
 infinito = 999999999
 inf = infinito
-w = 9
+w = infinito
+e = 9
 
 tamanhoLinha :: [Int] -> Int -- eh soh uma raiz quadrada devolvendo Int
 tamanhoLinha matrix = round (fromIntegral(length matrix) **0.5)
@@ -210,14 +229,27 @@ quantosVejo x y iter maiorVisto deslocX deslocY limX limY m
   -- | otherwise = iter --resultado encontrado por que o predio eh menor que o anterior
 
 
+linhaCerta :: Int-> [Int] -> Bool
+linhaCerta y m
+  | (getxym 0 y m == 9) && (getxym 0 ((tam m)-1) m == 9) =
+    True
+  | (getxym 0 y m == 9) =
+    ((getxym ((tam m)-1)    y    m)  == quantosVejo ((tam m)-2)  y      0 0 (-1)   0      0          inf      m)
+  | (getxym 0 ((tam m)-1) m == 9) =
+    ((getxym    0       y    m) ==                                     quantosVejo    1         y      0 0   1    0   ((tam m)-1)   inf      m)
+  | otherwise = ( ((getxym ((tam m)-1) y m) == quantosVejo ((tam m)-2)  y 0 0 (-1) 0 0  inf m) && ((getxym 0  y m) == quantosVejo 1 y 0 0  1 0 ((tam m)-1)  inf   m) )
+
+  --((getxym    0       y    m) ==                                     quantosVejo    1         y      0 0   1    0   ((tam m)-1)   inf      m)
+
 vejoCerto :: Int -> Int -> [Int] -> Bool
 vejoCerto x y m =
   ((getxym    0       y    m) >=                                     quantosVejo    1         y      0 0   1    0   ((tam m)-1)   inf      m) && --esqParaDir
   --dirParaEsq -- equivalenca ( se p -> q) para (not p || q), ou seja, se x==tam-1 então linha deve ser valida. pois antes nao dah pra saber ao certo
-  (( not (x == ((tam m)-2)) ) || ((getxym ((tam m)-1)    y    m)  >= quantosVejo ((tam m)-2)  y      0 0 (-1)   0      0          inf      m) ) &&
+  --(( not (x == ((tam m)-2)) ) || ((getxym ((tam m)-1)    y    m)  == quantosVejo ((tam m)-2)  y      0 0 (-1)   0      0          inf      m) ) &&
+  (( not (x == ((tam m)-2)) ) || linhaCerta y m ) &&
   ((getxym    x       0    m) >=                                     quantosVejo    x         1      0 0   0    1     inf     ((tam m)-1)  m) && --cimaParaBaixo
   --baixoPraCima equivalencia tambem.. se y==tam-1 então verificar de baixo pra cima
-  (( not (y == ((tam m)-2)) ) || ((getxym    x    ((tam m)-1) m)  >= quantosVejo    x    ((tam m)-2) 0 0   0  (-1)    inf          0       m) )
+  (( not (y == ((tam m)-2)) ) || ((getxym    x    ((tam m)-1) m)  == quantosVejo    x    ((tam m)-2) 0 0   0  (-1)    inf          0       m) )
 
 testaVejoCerto :: Int -> Int -> [Int] -> IO()
 testaVejoCerto x y m = do
@@ -311,7 +343,9 @@ main = do
   putStr("Assert resolve m3: " ++ show( resolvida p3 m3 == r3 )++"\n")
   putStr("Assert resolve m4: " ++ show( resolvida p4 m4 == r4 )++"\n")
   putStr("Assert resolve m5: " ++ show( resolvida p5 m5 == r5 )++"\n")
-  resolveEntre 0 50 p5 m5
+  resolveEntre lim lim p5 m5
+  putStr("Assert resolve m6: " ++ show( resolvida p6 m6 == r6 )++"\n")
+  resolveEntre lim lim p6 m6
   --resolveEntre 10000000 10000000 p7 m7
 
   --putStr( "inicial: \n"++(showMatriz 0 0 m3) )
