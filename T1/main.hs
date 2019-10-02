@@ -115,7 +115,6 @@ r6 = [0, 1, 3, 3, 2, 3, 0,
       3, 2, 1, 4, 3, 5, 1,
       0, 3, 2, 2, 2, 1, 0]
 
-
 --w = 9 -- eh um numero grande pra ser qd nao tem requisito do lado
 
 p7 = [1,2,3,4,5,6,7]
@@ -138,6 +137,34 @@ r7 = [0, e, 3, e, 4, 2, 4, e, 0,
       e, 5, 6, 4, 7, 3, 2, 1, 4,
       0, 3, e, 3, e, 4, 3, 4, 0]
 
+p8 = [1, 2, 3, 4]
+m8 = [d, e, e, e, e, 0,
+      e, o, o, o, o, e,
+      e, o, o, o, o, e,
+      e, o, o, o, o, e,
+      e, o, o, o, o, 2,
+      0, e, e, e, 4, 0]
+r8 = [d, e, e, e, e, 0,
+      e, 2, 3, 1, 4, e,
+      e, 1, 4, 2, 3, e,
+      e, 4, 1, 3, 2, e,
+      e, 3, 2, 4, 1, 2,
+      0, e, e, e, 4, 0]
+
+p9 = [1, 2, 3, 4]
+m9 = [d, e, e, e, e, 0,
+      3, o, o, o, o, 2,
+      e, o, o, o, o, e,
+      3, o, o, o, o, e,
+      e, o, o, o, o, e,
+      0, e, e, e, e, 0]
+r9 = [d, e, e, e, e, 0,
+      3, 1, 2, 4, 3, 2,
+      e, 3, 4, 2, 1, e,
+      3, 2, 1, 3, 4, e,
+      e, 4, 3, 1, 2, e,
+      0, e, e, e, e, 0]
+
 --tam = tamanhoLinha matriz
 tam m = tamanhoLinha m
 
@@ -148,7 +175,8 @@ mp p = p!!( (length p) -1)
 infinito = 999999999
 inf = infinito
 w = infinito
-e = 9
+e = 0
+d = 1 -- verificar diagonais
 
 tamanhoLinha :: [Int] -> Int -- eh soh uma raiz quadrada devolvendo Int
 tamanhoLinha matrix = round (fromIntegral(length matrix) **0.5)
@@ -195,6 +223,26 @@ jaTemNaColuna n x y m =
     else
       jaTemNaColuna n x (y+1) m
 
+jaTemNasDiagonais :: Int -> Int -> Int -> [Int] -> Bool
+jaTemNasDiagonais n x y m
+  | (y == 0) = False
+  | (n == getxym x y m) = True
+  | (x == y) && ((x + y) == (tam m) - 1) = (jaTemNaDiagonalPrincipal n (x - 1) (y - 1) m) || (jaTemNaDiagonalSecundaria n (x + 1) (y - 1) m)
+  | (x == y) = jaTemNaDiagonalPrincipal n (x - 1) (y - 1) m
+  | ((x + y) == (tam m) - 1) = jaTemNaDiagonalSecundaria n (x + 1) (y - 1) m
+
+jaTemNaDiagonalPrincipal :: Int -> Int -> Int -> [Int] -> Bool
+jaTemNaDiagonalPrincipal n x y m
+  | (y == 0) = False
+  | (n == getxym x y m) = True
+  | otherwise = jaTemNaDiagonalPrincipal n (x - 1) (y - 1) m
+
+jaTemNaDiagonalSecundaria :: Int -> Int -> Int -> [Int] -> Bool
+jaTemNaDiagonalSecundaria n x y m
+  | (y == 0) = False
+  | (n == getxym x y m) = True
+  | otherwise = jaTemNaDiagonalSecundaria n (x + 1) (y - 1) m
+
 insereNaPosicao :: Int -> Int -> [Int] -> [Int]
 insereNaPosicao num 0 (a:b) = [num] ++ (a:b)
 insereNaPosicao num pos (a:b) = [a] ++ insereNaPosicao num (pos - 1) b
@@ -226,25 +274,27 @@ quantosVejo x y iter maiorVisto deslocX deslocY limX limY m
 
 linhaCerta :: Int-> [Int] -> Bool
 linhaCerta y m
-  | (getxym 0 y m == 9) && (getxym 0 ((tam m)-1) m == 9) =
-    True
-  | (getxym 0 y m == 9) =
-    ((getxym ((tam m)-1)    y    m)  == quantosVejo ((tam m)-2)  y      0 0 (-1)   0      0          inf      m)
-  | (getxym 0 ((tam m)-1) m == 9) =
-    ((getxym    0       y    m) ==                                     quantosVejo    1         y      0 0   1    0   ((tam m)-1)   inf      m)
-  | otherwise = ( ((getxym ((tam m)-1) y m) == quantosVejo ((tam m)-2)  y 0 0 (-1) 0 0  inf m) && ((getxym 0  y m) == quantosVejo 1 y 0 0  1 0 ((tam m)-1)  inf   m) )
+  | (getxym 0 y m == e) || (getxym ((tam m) - 1) y m == e) = True
+  | (getxym 0 y m == e) = ((getxym ((tam m)-1) y m) == quantosVejo ((tam m)-2) y 0 0 (-1) 0 0 inf m)
+  | (getxym 0 ((tam m)-1) m == 9) = ((getxym 0 y m) == quantosVejo 1 y 0 0 1 0 ((tam m)-1) inf m)
+  | otherwise = (((getxym ((tam m)-1) y m) == quantosVejo ((tam m)-2) y 0 0 (-1) 0 0 inf m) && ((getxym 0 y m) == quantosVejo 1 y 0 0 1 0 ((tam m)-1) inf m))
+
+--colunaCerta :: Int -> [Int] -> Bool
+--colunaCerta x m
+--  | (getxym x 0 m == e) && (getxym x ((tam m) - 1) m == e) = True
+--  | (getxym x 0 m == e) = (getxym x ((tam m) - 1) m) == quantosVejo
 
   --((getxym    0       y    m) ==                                     quantosVejo    1         y      0 0   1    0   ((tam m)-1)   inf      m)
 
 vejoCerto :: Int -> Int -> [Int] -> Bool
 vejoCerto x y m =
-  ((getxym    0       y    m) >=                                     quantosVejo    1         y      0 0   1    0   ((tam m)-1)   inf      m) && --esqParaDir
+  (((getxym 0 y m) >= quantosVejo 1 y 0 0 1 0 ((tam m)-1) inf m) || (getxym 0 y m) == e) && --esqParaDir
   --dirParaEsq -- equivalenca ( se p -> q) para (not p || q), ou seja, se x==tam-1 então linha deve ser valida. pois antes nao dah pra saber ao certo
   --(( not (x == ((tam m)-2)) ) || ((getxym ((tam m)-1)    y    m)  == quantosVejo ((tam m)-2)  y      0 0 (-1)   0      0          inf      m) ) &&
-  (( not (x == ((tam m)-2)) ) || linhaCerta y m ) &&
-  ((getxym    x       0    m) >=                                     quantosVejo    x         1      0 0   0    1     inf     ((tam m)-1)  m) && --cimaParaBaixo
+  ((not (x == ((tam m)-2)) ) || linhaCerta y m) &&
+  (((getxym x 0 m) >= quantosVejo x 1 0 0 0 1 inf ((tam m)-1) m) || (getxym x 0 m) == e) && --cimaParaBaixo
   --baixoPraCima equivalencia tambem.. se y==tam-1 então verificar de baixo pra cima
-  (( not (y == ((tam m)-2)) ) || ((getxym    x    ((tam m)-1) m)  == quantosVejo    x    ((tam m)-2) 0 0   0  (-1)    inf          0       m) )
+  ((not (y == ((tam m)-2))) || ((getxym x ((tam m)-1) m) == quantosVejo x ((tam m)-2) 0 0 0 (-1) inf 0 m) || (getxym x ((tam m) - 1)) m == e)
 
 testaVejoCerto :: Int -> Int -> [Int] -> IO()
 testaVejoCerto x y m = do
@@ -261,7 +311,10 @@ testaQtd x y m = do
   putStr( "\nbaixo p/ cima:"++show(quantosVejo    x    ((tam m)-2) 0 0   0  (-1)    inf         0       m) ) --baixo para cima
 
 tahOk :: Int -> Int -> [Int] -> Bool
-tahOk x y m = (vejoCerto x y m) && (not (jaTemNaLinha (getxym x y m) 1 y (setXY (o) x y m) ) ) && (not (jaTemNaColuna (getxym x y m) x 1 (setXY (o) x y m)) )
+tahOk x y m 
+  | (getxym 0 0 m == d) && ((x == y) || (x + y == (tam m) - 1)) = (vejoCerto x y m) && (not (jaTemNaLinha (getxym x y m) 1 y (setXY (o) x y m) ) ) && (not (jaTemNaColuna (getxym x y m) x 1 (setXY (o) x y m)))
+    && (not (jaTemNasDiagonais (getxym x y m) x y (setXY (o) x y m)))
+  | otherwise = (vejoCerto x y m) && (not (jaTemNaLinha (getxym x y m) 1 y (setXY (o) x y m))) && (not (jaTemNaColuna (getxym x y m) x 1 (setXY (o) x y m)) )
 -- esse set de -1 eh porque se jah tiver o numero desejado na posição, ele vai considerar uma repetição.
 -- Então temos que passar uma matriz que não tem o numero desejado na posição alvo
 
@@ -317,8 +370,8 @@ testahOk x y m = do
   putStr( "\nvejo certo:"++   show(vejoCerto x y m) )
   -- esse set de -1(o) eh porque se jah tiver o numero desejado na posição, ele vai considerar uma repetição.
   -- Então temos que passar uma matriz que não tem o numero desejado na posição alvo
-  putStr( "\njah tem na linha:"++    show( (jaTemNaLinha (getxym x y m) 1 y (setXY (o) x y m) ) ) )
-  putStr( "\njah tem na coluna:"++   show( (jaTemNaColuna (getxym x y m) x 1 (setXY (o) x y m)) ) )
+  putStr( "\njah tem na linha:"++    show( (jaTemNaLinha (getxym x y m) 1 y (setXY (o) x y m))))
+  putStr( "\njah tem na coluna:"++   show( (jaTemNaColuna (getxym x y m) x 1 (setXY (o) x y m))))
 
 
 resolveEntre :: Int->Int->[Int]->[Int]-> IO ()
@@ -333,7 +386,6 @@ resolvida p m = (resolve lim 1 1 m (zeros m) p)
 
 main = do
   --putStr(showMatriz 0 0 (insereNaPosicao2 (-8) 7 m5) ++ "\n")
-  putStr(show (insereNaPosicao (-8) 2 (removeDaPosicao 2 [1, 2, 3, 4, 5, 6])))
   putStr("Assert resolve m0: " ++ show( resolvida p0 m0 == r0 )++"\n")
   putStr("Assert resolve m1: " ++ show( resolvida p1 m1 == r1 )++"\n")
   putStr("Assert resolve m2: " ++ show( resolvida p2 m2 == r2 )++"\n")
@@ -341,9 +393,13 @@ main = do
   putStr("Assert resolve m4: " ++ show( resolvida p4 m4 == r4 )++"\n")
   putStr("Assert resolve m5: " ++ show( resolvida p5 m5 == r5 )++"\n")
   putStr("Assert resolve m6: " ++ show( resolvida p6 m6 == r6 )++"\n")
-  resolveEntre lim lim p5 m5
-  resolveEntre lim lim p6 m6
-  --resolveEntre 10000000 10000000 p7 m7
+  putStr("Assert resolve m8: " ++ show( resolvida p8 m8 == r8 )++"\n")
+  putStr("Assert resolve m9: " ++ show( resolvida p9 m9 == r9 )++"\n")
+  -- resolveEntre lim lim p5 m5
+  -- resolveEntre lim lim p6 m6
+  -- resolveEntre lim lim p8 m8
+  resolveEntre lim lim p8 m8
+  resolveEntre lim lim p9 m9
 
   --putStr( "inicial: \n"++(showMatriz 0 0 m3) )
   --putStr( "\nresult: \n"++(showMatriz 0 0 r3) )
