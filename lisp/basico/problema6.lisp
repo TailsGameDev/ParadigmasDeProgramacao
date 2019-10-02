@@ -48,12 +48,10 @@ main = do
 
 (defun existeTriang (a b c)
   (cond
-    ( and (< (absoluto(- b c) a)) (< a (+ b c)) "Falso")
+    ( (not (and (< (absoluto(- b c)) a) (< a (+ b c)))) "Falso")
+    ( (not (and (< (absoluto(- a c)) b) (< b (+ a c)))) "Falso")
+    ( (not (and (< (absoluto(- a b)) c) (< b (+ a c)))) "Falso")
     (t "Verdadeiro")
-    | not (absoluto(b - c) < a && a < b + c) = "Falso"
-    | not (absoluto(a - c) < b && b < a + c) = "Falso"
-    | not (absoluto(a - b) < c && b < a + c) = "Falso"
-    | otherwise = "Verdadeiro"
   )
 )
 
