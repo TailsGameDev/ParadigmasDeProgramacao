@@ -195,23 +195,18 @@ jaTemNaColuna n x y m =
     else
       jaTemNaColuna n x (y+1) m
 
+insereNaPosicao :: Int -> Int -> [Int] -> [Int]
+insereNaPosicao num 0 (a:b) = [num] ++ (a:b)
+insereNaPosicao num pos (a:b) = [a] ++ insereNaPosicao num (pos - 1) b
+insereNaPosicao num _ [] = [num]
 
-removeDaPosicao :: Int -> Int -> [Int] -> [Int]
-removeDaPosicao i pos (a:b) =
-  if i==pos then
-    b
-  else
-    [a] ++ (removeDaPosicao (i+1) pos b)
-
-insereNaPosicao :: Int -> Int -> Int -> [Int] -> [Int]
-insereNaPosicao num i pos (a:b) =
-  if i==(pos-1) then
-    [a] ++ [num] ++ b
-  else
-    [a] ++ (insereNaPosicao num (i+1) pos b)
+removeDaPosicao :: Int -> [Int] -> [Int]
+removeDaPosicao 0 (a:b) = b
+removeDaPosicao pos (a:b) = [a] ++ removeDaPosicao (pos - 1) b
+removeDaPosicao _ [] = []
 
 setXY :: Int -> Int -> Int -> [Int] -> [Int]
-setXY num x y m = insereNaPosicao num 0 (x+y*(tam m)) (removeDaPosicao 0 (x+y*(tam m)) m)
+setXY num x y m = insereNaPosicao num (x+y*(tam m)) (removeDaPosicao (x+y*(tam m)) m)
 
 --iter guarda quantos foram vistos
 --A funcao eh pensada para percorrer uma linha ou uma coluna no sentido
@@ -337,14 +332,16 @@ resolvida :: [Int] -> [Int] -> [Int]
 resolvida p m = (resolve lim 1 1 m (zeros m) p)
 
 main = do
+  --putStr(showMatriz 0 0 (insereNaPosicao2 (-8) 7 m5) ++ "\n")
+  putStr(show (insereNaPosicao (-8) 2 (removeDaPosicao 2 [1, 2, 3, 4, 5, 6])))
   putStr("Assert resolve m0: " ++ show( resolvida p0 m0 == r0 )++"\n")
   putStr("Assert resolve m1: " ++ show( resolvida p1 m1 == r1 )++"\n")
   putStr("Assert resolve m2: " ++ show( resolvida p2 m2 == r2 )++"\n")
   putStr("Assert resolve m3: " ++ show( resolvida p3 m3 == r3 )++"\n")
   putStr("Assert resolve m4: " ++ show( resolvida p4 m4 == r4 )++"\n")
   putStr("Assert resolve m5: " ++ show( resolvida p5 m5 == r5 )++"\n")
-  resolveEntre lim lim p5 m5
   putStr("Assert resolve m6: " ++ show( resolvida p6 m6 == r6 )++"\n")
+  resolveEntre lim lim p5 m5
   resolveEntre lim lim p6 m6
   --resolveEntre 10000000 10000000 p7 m7
 
