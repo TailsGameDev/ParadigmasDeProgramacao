@@ -351,10 +351,10 @@ testaVejoCerto x y m = do
 
 testaQtd :: Int -> Int -> [Int] -> IO ()
 testaQtd x y m = do
-    putStr( "\nesq p/ dir:"++   show(quantosVejo 1 y 0 0 1 0 ((tam m)-1) inf m)) --esq para dir
-    putStr( "\ndir p/ esq:"++   show(quantosVejo ((tam m)-2) y 0 0 (-1) 0 0 inf m) ) --dir para esq
-    putStr( "\ncima p/ baixo:"++show(quantosVejo x 1 0 0 0 1 inf ((tam m)-1)  m)) --cima para baixo
-    putStr( "\nbaixo p/ cima:"++show(quantosVejo x ((tam m)-2) 0 0 0 (-1) inf 0 m) ) --baixo para cima
+    putStr( "\nesq p/ dir:" ++ show(quantosVejo 1 y 0 0 1 0 ((tam m)-1) inf m)) --esq para dir
+    putStr( "\ndir p/ esq:" ++ show(quantosVejo ((tam m)-2) y 0 0 (-1) 0 0 inf m) ) --dir para esq
+    putStr( "\ncima p/ baixo:" ++ show(quantosVejo x 1 0 0 0 1 inf ((tam m)-1)  m)) --cima para baixo
+    putStr( "\nbaixo p/ cima:" ++ show(quantosVejo x ((tam m)-2) 0 0 0 (-1) inf 0 m) ) --baixo para cima
 
 tahOk :: Int -> Int -> [Int] -> Bool
 tahOk x y m 
