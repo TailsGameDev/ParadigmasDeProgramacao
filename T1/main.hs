@@ -212,6 +212,24 @@ r12 = [0, 2, 3, 2, 2, 1, 3, 0,
        2, 4, 6, 1, 2, 3, 5, 2,
        0, 3, 1, 3, 2, 4, 2, 0]
 
+p13 = [1, 2, 3, 4, 5, 6]
+m13 = [0, 1, 2, 2, 2, 3, 3, 0,
+       1, o, o, o, o, o, o, 5,
+       2, o, o, o, o, o, o, 3,
+       2, o, o, o, o, o, o, 1,
+       2, o, o, o, o, o, o, 4,
+       3, o, o, o, o, o, o, 4,
+       2, o, o, o, o, o, o, 2,
+       0, 3, 3, 2, 4, 1, 2, 0]
+r13 = [0, 1, 2, 2, 2, 3, 3, 0,
+       1, 6, 4, 5, 3, 2, 1, 5,
+       2, 3, 1, 2, 6, 5, 4, 3,
+       2, 5, 3, 4, 2, 1, 6, 1,
+       2, 2, 6, 1, 5, 4, 3, 4,
+       3, 1, 5, 6, 4, 3, 2, 4,
+       2, 4, 2, 3, 1, 6, 5, 2,
+       0, 3, 3, 2, 4, 1, 2, 0] 
+
 
 --tam = tamanhoLinha matriz
 tam m = tamanhoLinha m
@@ -424,7 +442,7 @@ resolveEntre :: Int->Int->[Int]->[Int]-> IO ()
 resolveEntre ini fim p m = forM_ [ini..fim] $ \i ->
     putStrLn ("step " ++ show i ++"\n"++(showMatriz 0 0 (resolve i 1 1 m (criaMatrizV m) p indo) ))
 
-lim = 500000 -- limite da recursão
+lim = 5000000 -- limite da recursão
 
 --resolvida retorna a matriz resolvida (ou tenta)
 resolvida :: [Int] -> [Int] -> [Int]
@@ -446,6 +464,7 @@ main = do
     putStr("Assert resolve m10: " ++ show( resolvida p10 m10 == r10 )++"\n")
     putStr("Assert resolve m11: " ++ show( resolvida p11 m11 == r11 )++"\n")
     putStr("Assert resolve m12: " ++ show( resolvida p12 m12 == r12 )++"\n")
+    putStr("Assert resolve m13: " ++ show( resolvida p13 m13 == r13 )++"\n")
     -- resolveEntre lim lim p5 m5
     -- resolveEntre lim lim p6 m6
     -- resolveEntre lim lim p8 m8
@@ -457,7 +476,7 @@ main = do
 
     --putStr( "inicial: \n"++(showMatriz 0 0 m3) )
     --putStr( "\nresult: \n"++(showMatriz 0 0 r3) )
-    --resolveEntre 20 30 p3 m3
+    resolveEntre 1000000 1000000 p7 m7
     --putStr( "\nresult: \n"++(showMatriz 0 0 t3) )
     --testahOk 3 2 t3
     --testaQtd 3 2 t3
