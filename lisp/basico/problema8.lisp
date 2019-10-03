@@ -1,4 +1,4 @@
-{-
+#|{-
 Crie uma fun ̧c ̃ao que resolva uma equa ̧c ̃ao de segundo grau da formaa
 x2+bx+cutilizando a f ́ormulade Bhaskara.  Leia os coeficientes a, b e c do teclado.
 -}
@@ -22,3 +22,18 @@ main = do
 
   print("eq de segundo grau =")
   print( (funcao x y z oX) )
+|#
+
+(defun bhaskara (x a b c)
+  (+ c (* b x) (* a x x) )
+)
+
+(defun main ()
+  (setq a (read))
+  (setq b (read))
+  (setq c (read))
+  (write-line "se x = 4 -> bhaskara eh")
+  (write-line (write-to-string (bhaskara 4 a b c) ) )
+)
+
+(main)

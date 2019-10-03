@@ -1,3 +1,4 @@
+#|
 {-
 Crie uma fun ̧c ̃ao que receba dois n ́umeros x e y e retorne o m ́aximo divisor
  comum (DICA: pesquise sobreo Algoritmo de Euclides).  Leia x e y do teclado.
@@ -31,3 +32,18 @@ main = do
 
   print("O MDC eh: ")
   print((euclides x y))
+|#
+(defun euclides (a b)
+  (cond
+    ( (= b 0) a)
+    ( t (euclides b (mod a b)))
+  )
+)
+
+(defun main ()
+  (setq a (read))
+  (setq b (read))
+  (write-line (write-to-string (euclides a b) ) )
+)
+
+(main)

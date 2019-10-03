@@ -1,3 +1,4 @@
+#|
 {-
 Crie uma funcao que compute o enesimo numero de fibonacci. Leia n do teclado
 -}
@@ -13,3 +14,23 @@ main = do
     let x = (read xString :: Int)
 
     print( (fibonacci x) )
+|#
+
+(defun absoluto (x)
+  (expt (* x x) 0.5)
+)
+
+(defun fibonacci (a)
+  (cond
+    ( (= a 0) 0)
+    ( (= a 1) 1)
+    (t (+ (fibonacci (- a 1)) (fibonacci (- a 2)) ) )
+  )
+)
+
+(defun main ()
+  (setq x (read))
+  (write-line (write-to-string (fibonacci x) ) )
+)
+
+(main)

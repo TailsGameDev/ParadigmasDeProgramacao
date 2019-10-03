@@ -1,4 +1,4 @@
-{-
+#|{-
 Crie uma fun ̧c ̃ao que receba 3 valores num ́ericos (a, b, c) e retorne
  o maior deles.  N ̃ao utilize nenhumaforma de ordena ̧c ̃ao.
    Leia os valores a, b, c do teclado.
@@ -26,3 +26,25 @@ main = do
   let z = (read zString :: Float)
 
   print(funcao x y z)
+
+|#
+
+(defun greater ( x y )
+  (cond
+    ( (> x y) x)
+    (t y)
+  )
+)
+
+(defun maior (a b c)
+  ( greater (greater a b) c )
+)
+
+(defun main ()
+  (setq a (read))
+  (setq b (read))
+  (setq c (read))
+  (write-line (write-to-string (maior a b c) ) )
+)
+
+(main)
