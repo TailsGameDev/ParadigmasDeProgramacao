@@ -1,3 +1,4 @@
+#|
 {-
 Crie uma função com assinatura apagarEnquanto :: (t -> Bool) -> [t] -> [t], a qual recebe uma
 função como parâmetro e uma lista, e retorna uma lista. Esta função deve aplicar a função passada como
@@ -20,3 +21,24 @@ apagarEnquanto f (a:b)=
 
 main = do
   print ( (apagarEnquanto par [2,4,1,2,3,4,5]) )
+|#
+
+(defun filtrar (f lista)
+  (if (null lista)
+    ()
+    (if (funcall f (car lista))
+    (cons (car lista) (filtrar f (cdr lista)))
+    (); para aqui caso f seja falso
+    )
+  )
+)
+
+(defun par (a)
+  (= (mod a 2) 0)
+)
+
+(defun main ()
+  (write-line (write-to-string (filtrar 'par '(2 2 3 2) ) ) )
+)
+
+(main)

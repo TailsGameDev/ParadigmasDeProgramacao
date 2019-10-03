@@ -1,3 +1,4 @@
+#|
 alunos :: [(Int, String, Float)]
 alunos = [(1, "Ana", 3.4), (2, "Bob", 6.7), (3, "Tom", 4.0)]
 
@@ -40,3 +41,65 @@ aprovados2 ( (i,nome,media) : b ) =
 main = do
     print (gerarPares alunos alunos)
     --print (gerarPares alunos)
+|#
+(defun alunos()
+    '((1 "Bob" (5.6 8 9.3))
+      (2 "Ana" (8.2 9 7 6.5))
+      (3 "Tom" (3.2 7 5.7 8.3))
+      (4 "Bin" (7.5 5.3 8.5 6.2 3.1))
+      (5 "Bia" (6.7 4.1 5.5)))
+)
+
+(defun getNome (aluno)
+    (car (cdr aluno))
+)
+
+(defun getNomes (lista)
+    (if (null lista)
+        ()
+        (cons (getNome (car lista)) (getNomes (cdr lista)))
+    )
+)
+
+; ----------------------------------- A -------------------------------------
+(defun comprimento (lista)
+  (cond
+    ( (null lista) 0 )
+    ( t (+ 1 (comprimento (cdr lista) )) )
+  )
+)
+
+(defun soma (lista)
+  (cond
+    ( (null lista) 0 )
+    ( t (+ (car lista) (soma (cdr lista) )) )
+  )
+)
+
+(defun media (lista)
+  (/ (soma lista) (comprimento lista) )
+)
+
+(defun getNotas (aluno)
+    (car (cdr (cdr aluno)) )
+)
+
+(defun A (lista) ;lista de alunos
+  (cond
+    ( (null lista) () )
+    ( t
+      (setq aluno (car lista))
+      (setq medya (media (getNotas aluno)) )
+      (setq tupla (cons (getNome aluno) medya) )
+      (cons tupla (A (cdr lista)) )
+    )
+  )
+)
+
+; ----------------------------------- A -------------------------------------
+
+(defun main ()
+    (write-line (write-to-string (A (alunos) ) ))
+)
+
+(main)
