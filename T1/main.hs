@@ -1,23 +1,14 @@
 import Control.Monad
 
 {-
-representacao: matriz com duas colunas e duas colunas a mais para armazenar
-a quantidade de predios que pode ser vista naquela linha
+Matrizes são representadas em uma lista simples. São linearizadas,e acessadas
+no estili x + y*width.
 
-matriz trivial:
-
-vazia
-   _ _
-1  _ _ _
-_  _ _ _
-   _ _
-
-
-solucao:
-   _ _
-1  2 1 _
-_  1 2 _
-   _ _
+p é uma lista com os números possíveis para uma matriz, m é uma matriz, com
+inclusive na volta dela, dizendo quandos prédios devem ser vistos.
+r é a matriz de resultado, que se espera encontrar com a execução do programa.
+estão sendo feito vários testes com a execução do programa.
+'o' eh -1, que indica que um espaço não foi preenchido.
 -}
 
 p0 = [1]
@@ -114,7 +105,7 @@ r6 = [0, 1, 3, 3, 2, 3, 0,
       3, 2, 1, 4, 3, 5, 1,
       0, 3, 2, 2, 2, 1, 0]
 
---w = 9 -- eh um numero grande pra ser qd nao tem requisito do lado
+--e = 0 eh quando não informa a quantidade de prédios que devem ser vistos.
 
 p7 = [1,2,3,4,5,6,7]
 m7 = [0, e, 3, e, 4, 2, 4, e, 0,
@@ -228,7 +219,7 @@ r13 = [0, 1, 2, 2, 2, 3, 3, 0,
        2, 2, 6, 1, 5, 4, 3, 4,
        3, 1, 5, 6, 4, 3, 2, 4,
        2, 4, 2, 3, 1, 6, 5, 2,
-       0, 3, 3, 2, 4, 1, 2, 0] 
+       0, 3, 3, 2, 4, 1, 2, 0]
 
 
 --tam = tamanhoLinha matriz
@@ -247,18 +238,23 @@ d = 1 -- verificar diagonais
 indo = True
 voltando = False
 
+-- retorna uma matriz similar a matriz passada, que auxilia na execução do
+-- programa guardando o index da lista de números possíveis p/ cada posição (x,y)
 criaMatrizV :: [Int] -> [Int]
 criaMatrizV [] = []
 criaMatrizV (a:b)
     | (a == o) = [0] ++ criaMatrizV b
     | otherwise = [-1] ++ criaMatrizV b
 
+--retorna o tamanho da linha da matriz passada
 tamanhoLinha :: [Int] -> Int -- eh soh uma raiz quadrada devolvendo Int
 tamanhoLinha matrix = round (fromIntegral(length matrix) ** 0.5)
 
+--retorna o elemento na posição (x,y) da matriz m
 getxym :: Int -> Int -> [Int] -> Int
 getxym x y m = m !! (x + y*(tam m))
 
+--função ajuda na tarefa de imprimir uma matriz, retornando uma linha formatada
 --           x     y     matriz
 getLinha :: Int -> Int -> [Int] -> String
 getLinha x y m =
@@ -270,6 +266,7 @@ getLinha x y m =
         else
             " " ++ show (getxym x y m ) ++ " " ++ (getLinha (x+1) y m)
 
+--retorna uma matriz pronta para imprimir na tela.
 --           x     y     matriz
 showMatriz :: Int-> Int-> [Int] -> String
 showMatriz x y m =
@@ -337,6 +334,8 @@ quantosVejo x y iter maiorVisto deslocX deslocY limX limY m
     -- predio eh igual (0) dae continua lendo mas nao incrementa contagem
     | (getxym x y m) <= maiorVisto = quantosVejo (x+deslocX) (y+deslocY) (iter) maiorVisto deslocX deslocY limX limY m
 
+--para um dado y, considerando que a linha está completamente preenchida, verifica
+--se está sendo vista a quantidade certa nos dois sentidos.
 linhaCerta :: Int-> [Int] -> Bool
 linhaCerta y m
     | (getxym 0 y m == e) && (getxym ((tam m) - 1) y m == e) = True
@@ -344,6 +343,7 @@ linhaCerta y m
     | (getxym ((tam m)-1) y m == e) = (getxym 0 y m) == quantosVejo 1 y 0 0 1 0 ((tam m)-1) inf m
     | otherwise = (((getxym ((tam m)-1) y m) == quantosVejo ((tam m)-2) y 0 0 (-1) 0 0 inf m) && ((getxym 0 y m) == quantosVejo 1 y 0 0 1 0 ((tam m)-1) inf m))
 
+--similar à linhaCerta, função acima.
 colunaCerta :: Int -> [Int] -> Bool
 colunaCerta x m
     | (getxym x 0 m == e) && (getxym x ((tam m) - 1) m == e) = True
@@ -351,6 +351,17 @@ colunaCerta x m
     | (getxym x ((tam m) - 1) m == e) = (getxym x 0 m) == quantosVejo x 1 0 0 0 1 inf ((tam m) - 1) m
     | otherwise = (((getxym x ((tam m) - 1) m) == quantosVejo x ((tam m) - 2) 0 0 0 (-1) inf 0 m) && ((getxym x 0 m) == quantosVejo x 1 0 0 0 1 inf ((tam m) - 1) m))
 
+{-}
+--essa função é crucial no programa. Ela é chamada para a última posição que se
+tentou preencher. Note que se tenta preencher da esquerda para a direita, e de
+cima para baixo. Dessa forma, a função vejoCerto verifica se da esquerda para a
+direita, está sendo vista uma quantidade menor ou igual ao limite de prédios.
+Ué, mas e da direita para a esquerda? Ela verifica daí só quando a linha tiver
+sido completamente preenchida, e daí se verifica se as quantidades são exatamente
+iguais as desejadas, não mais ">=".
+Isso porque se quer saber se o número na posição (x,y) é um chute coerente do que
+pode vir a ser o resultado.
+-}
 vejoCerto :: Int -> Int -> [Int] -> Bool
 vejoCerto x y m =
     (((getxym 0 y m) >= quantosVejo 1 y 0 0 1 0 ((tam m)-1) inf m) || (getxym 0 y m) == e) && --esqParaDir
@@ -360,13 +371,14 @@ vejoCerto x y m =
     -- baixoPraCima equivalencia tambem.. se y==tam-1 então verificar de baixo pra cima
     ((not (y == ((tam m)-2))) || colunaCerta x m || (getxym x ((tam m) - 1)) m == e)
 
+-- função para testar a função vejoCerto durante o desenvolvimento.
 testaVejoCerto :: Int -> Int -> [Int] -> IO()
 testaVejoCerto x y m = do
     putStr( "\nEsqPAraDir: " ++ show(((getxym 0 y m) >= quantosVejo 1 y 0 0 1 0 ((tam m)-1) inf m)) )
     putStr( "\nDirParaEsq: " ++ show((not (x == ((tam m)-2)) ) || ((getxym ((tam m)-1)    y    m)  >= quantosVejo ((tam m)-2) y 0 0 (-1) 0 0 inf m)))
     putStr( "\ncimapBaixo: " ++ show((getxym x 0 m) >= quantosVejo x 1 0 0 0 1 inf ((tam m)-1)  m))
     putStr( "\nbaixopCima: " ++ show((not (y == ((tam m)-2)) ) || ((getxym x ((tam m)-1) m) >= quantosVejo x ((tam m)-2) 0 0 0 (-1) inf 0 m)))
-
+-- função para testar a função vejoCerto durante o desenvolvimento.
 testaQtd :: Int -> Int -> [Int] -> IO ()
 testaQtd x y m = do
     putStr( "\nesq p/ dir:" ++ show(quantosVejo 1 y 0 0 1 0 ((tam m)-1) inf m)) --esq para dir
@@ -374,14 +386,22 @@ testaQtd x y m = do
     putStr( "\ncima p/ baixo:" ++ show(quantosVejo x 1 0 0 0 1 inf ((tam m)-1)  m)) --cima para baixo
     putStr( "\nbaixo p/ cima:" ++ show(quantosVejo x ((tam m)-2) 0 0 0 (-1) inf 0 m) ) --baixo para cima
 
+{-
+função muito importante, tahOk, testa se uma posição (x,y) está no caminho certo.
+Veja o comentário sobre a função 'vejoCerto', pois as verificações são justamente
+o que se faz na vejoCerto (ver se quantidade de prédios vistos é coerente), e
+ver se o último número se repete na sua linha, coluna, e talvez na sua diagonal.
+-}
 tahOk :: Int -> Int -> [Int] -> Bool
-tahOk x y m 
+tahOk x y m
     | (getxym 0 0 m == d) && ((x == y) || (x + y == (tam m) - 1)) = (vejoCerto x y m) && (not (jaTemNaLinha (getxym x y m) x y (setXY (o) x y m) ) ) && (not (jaTemNaColuna (getxym x y m) x y (setXY (o) x y m)))
         && (not (jaTemNasDiagonais (getxym x y m) x y (setXY (o) x y m)))
     | otherwise = (vejoCerto x y m) && (not (jaTemNaLinha (getxym x y m) x y (setXY (o) x y m))) && (not (jaTemNaColuna (getxym x y m) x y (setXY (o) x y m)) )
     -- esse set de -1 (o) eh porque se jah tiver o numero desejado na posição, ele vai considerar uma repetição.
     -- Então temos que passar uma matriz que não tem o numero desejado na posição alvo
 
+-- as próximas funções caminham no x e no y, pegando o próximo e o anterior, considerando
+-- o tamanho da matriz, e suas bordas que contém informação extra.
 backX :: Int -> [Int]-> Int
 backX x m =
     if x <= 1 then
@@ -408,26 +428,32 @@ nextY x y m
     | x >= ((tam m)-2) && y > (tam m)-3 = -1 --isso deve ser gatilho para encerrar a execução
     | otherwise = y
 
+-- cria uma matriz do tamanho da passada como parâmetro, repleta de zeros
 zeros :: [Int] -> [Int]
 zeros [] = []
 zeros (a:b) = [0] ++ (zeros b)
 
+{-
+a função resolve é o coração do programa. Ela recebe uma matriz, vai modificando
+essa matriz e a passando para suas chamadas recursivas. Ela tem alguns casos, comentados
+no corpo da função
+-}
 resolve :: Int-> Int -> Int -> [Int] -> [Int] -> [Int] -> Bool -> [Int]
-resolve k x y m v p d -- k= limiteDaRecursao, x, y, m, v=matrizGuardaIndexNoVetorDePossiveis, p=listaDeNumerosPossiveis[100% constante]
-    | k <=0 = m -- ESCOLHA AQUI v OU m
-    | y < 0 = m -- foi sinalizado y = -1 -> encerrar execução .. na vdd nao tah parando mas era a ideia
-    --tudo certo, vamo pro proximo
+resolve k x y m v p d -- k= limiteDaRecursao, x, y, m, v=matrizGuardaIndexNoVetorDePossiveis, p=listaDeNumerosPossiveis[100% constante] d=RepetiçãoEhProibidaNasDiagonais
+    | k <=0 = m -- ESCOLHA AQUI v OU m para ser retornada (e exibida) ao atingir iteração k
+    | y < 0 = m -- foi sinalizado y = -1 -> encerrar execução .. na vdd nao tah parando mas era a ideia parar caso y==-1
     -- Estava indo e encontrou posicao que na pode mudar, vai para a proxima
     | (getxym x y v == -1 && d == indo) = resolve (k-1) (nextX x m) (nextY x y m) m v p indo
     -- Estava voltando e encontrou posicao que nao pode mudar, volta mais uma posicao
     | (getxym x y v == -1 && d == voltando) = resolve (k-1) (backX x m) (backY x y) m v p voltando
-    -- nenhum encaixa aki, mude o anterior (mp pega o ultimo elemento -> o maior possível)
+    -- nenhum encaixa aki, mude o anterior (mp pega o ultimo elemento -> o Maior Possível ié o Maior da lista de Possívels)
     | (getxym x y m) >= (mp p) = resolve (k-1) (backX x m) (backY x y) (setXY o x y m) (setXY 0 x y v) p voltando
-    --tudo certo, substitui e bola pra frente
+    --tudo certo (tahOk!), substitui e bola pra frente
     | tahOk x y (setXY (p!!(getxym x y v)) x y m ) = resolve (k-1) (nextX x m) (nextY x y m) (setXY (p!!(getxym x y v)) x y m ) (setXY ((getxym x y v) +1) x y v ) p indo
-    -- tenta o proximo numero aki
+    -- não tahOk, tente o próximo número na lista de números possíveis
     | not (tahOk x y (setXY (p!!(getxym x y v)) x y m )) = resolve (k-1) x y (setXY (p!!(getxym x y v)) x y m ) (setXY (( (getxym x y v) +1) ) x y v ) p indo
 
+-- função auxiliar para testar a tahOk durante o desenvolvimento
 testahOk :: Int->Int->[Int]->IO ()
 testahOk x y m = do
     putStr( "numero: "++show(getxym x y m)++" posicao: ("++show(x)++","++show(y)++")\n")
@@ -438,6 +464,8 @@ testahOk x y m = do
     putStr( "\njah tem na linha:"++    show( (jaTemNaLinha (getxym x y m) 1 y (setXY (o) x y m))))
     putStr( "\njah tem na coluna:"++   show( (jaTemNaColuna (getxym x y m) x 1 (setXY (o) x y m))))
 
+-- função sagaz que resolve a matriz parando na iteração 'ini' até parando na iteração 'fim'
+-- imprimindo assim o progrsso na resolução. Muito útil para testes
 resolveEntre :: Int->Int->[Int]->[Int]-> IO ()
 resolveEntre ini fim p m = forM_ [ini..fim] $ \i ->
     putStrLn ("step " ++ show i ++"\n"++(showMatriz 0 0 (resolve i 1 1 m (criaMatrizV m) p indo) ))
@@ -457,26 +485,17 @@ main = do
     putStr("Assert resolve m4: " ++ show( resolvida p4 m4 == r4 )++"\n")
     putStr("Assert resolve m5: " ++ show( resolvida p5 m5 == r5 )++"\n")
     putStr("Assert resolve m6: " ++ show( resolvida p6 m6 == r6 )++"\n")
-    -- Nao consegue terminar a 7x7
-    -- putStr("Assert resolve m7: " ++ show( resolvida p7 m7 == r7 )++"\n")
     putStr("Assert resolve m8: " ++ show( resolvida p8 m8 == r8 )++"\n")
     putStr("Assert resolve m9: " ++ show( resolvida p9 m9 == r9 )++"\n")
     putStr("Assert resolve m10: " ++ show( resolvida p10 m10 == r10 )++"\n")
     putStr("Assert resolve m11: " ++ show( resolvida p11 m11 == r11 )++"\n")
     putStr("Assert resolve m12: " ++ show( resolvida p12 m12 == r12 )++"\n")
     putStr("Assert resolve m13: " ++ show( resolvida p13 m13 == r13 )++"\n")
-    -- resolveEntre lim lim p5 m5
-    -- resolveEntre lim lim p6 m6
-    -- resolveEntre lim lim p8 m8
-    -- resolveEntre lim lim p5 m5
-    -- resolveEntre lim lim p7 m7
-    -- resolveEntre lim lim p8 m8
-    -- resolveEntre lim lim p9 m9
-    -- resolveEntre lim lim p11 m11
 
-    --putStr( "inicial: \n"++(showMatriz 0 0 m3) )
-    --putStr( "\nresult: \n"++(showMatriz 0 0 r3) )
-    resolveEntre 1000000 1000000 p7 m7
+    --substitua p11 e m11 por uma lista de possíveis e uma matriz que queiras ver o resultado.
+    resolveEntre lim lim p11 m11
+
+    --alguns testes antigos:
     --putStr( "\nresult: \n"++(showMatriz 0 0 t3) )
     --testahOk 3 2 t3
     --testaQtd 3 2 t3
