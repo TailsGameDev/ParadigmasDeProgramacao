@@ -221,6 +221,39 @@ r13 = [0, 1, 2, 2, 2, 3, 3, 0,
        2, 4, 2, 3, 1, 6, 5, 2,
        0, 3, 3, 2, 4, 1, 2, 0]
 
+p325 = [0,1,2,3,4]
+m325 = [0, e, 3, 1, e, 2, 0,
+        e, o, o, o, o, o, 3,
+        e, o, o, o, o, o, 1,
+        e, o, o, o, o, o, e,
+        e, o, o, o, o, o, 4,
+        e, o, o, o, o, o, 4,
+        0, e, 1, 2, 2, e, 0 ]
+r325 = [0, e, 3, 1, e, 2, 0,
+        e, 1, 0, 4, 3, 2, 3,
+        e, 3, 2, 1, 0, 4, 1,
+        e, 2, 1, 0, 4, 3, e,
+        e, 4, 3, 2, 1, 0, 4,
+        e, 0, 4, 3, 2, 1, 4,
+        0, e, 1, 2, 2, e, 0 ]
+
+p270 = [1,2,3,4,5,6]
+m270 =[0, 3, 3, e, e, e, 2, 0,
+       3, o, o, o, o, o, o, 2,
+       e, o, o, o, o, o, o, 3,
+       3, o, o, o, o, o, o, 1,
+       2, o, o, o, o, o, o, 3,
+       e, o, o, o, o, o, o, 4,
+       1, o, o, o, o, o, o, 5,
+       0, e, 2, 3, 5, 4, 4, 0]
+r270=[0, 3, 3, e, e, e, 2, 0,
+      3, 3, 2, 1, 4, 6, 5, 2,
+      e, 5, 4, 3, 6, 2, 1, 3,
+      3, 4, 3, 2, 5, 1, 6, 1,
+      2, 2, 1, 6, 3, 5, 4, 3,
+      e, 1, 6, 5, 2, 4, 3, 4,
+      1, 6, 5, 4, 1, 3, 2, 5,
+      0, e, 2, 3, 5, 4, 4, 0]
 
 --tam = tamanhoLinha matriz
 tam m = tamanhoLinha m
@@ -470,7 +503,7 @@ resolveEntre :: Int->Int->[Int]->[Int]-> IO ()
 resolveEntre ini fim p m = forM_ [ini..fim] $ \i ->
     putStrLn ("step " ++ show i ++"\n"++(showMatriz 0 0 (resolve i 1 1 m (criaMatrizV m) p indo) ))
 
-lim = 5000000 -- limite da recursão
+lim = 5200000 -- limite da recursão
 
 --resolvida retorna a matriz resolvida (ou tenta)
 resolvida :: [Int] -> [Int] -> [Int]
@@ -489,11 +522,14 @@ main = do
     putStr("Assert resolve m9: " ++ show( resolvida p9 m9 == r9 )++"\n")
     putStr("Assert resolve m10: " ++ show( resolvida p10 m10 == r10 )++"\n")
     putStr("Assert resolve m11: " ++ show( resolvida p11 m11 == r11 )++"\n")
-    putStr("Assert resolve m12: " ++ show( resolvida p12 m12 == r12 )++"\n")
-    putStr("Assert resolve m13: " ++ show( resolvida p13 m13 == r13 )++"\n")
+    --putStr("Assert resolve m12: " ++ show( resolvida p12 m12 == r12 )++"\n")
+    --putStr("Assert resolve m13: " ++ show( resolvida p13 m13 == r13 )++"\n")
 
     --substitua p11 e m11 por uma lista de possíveis e uma matriz que queiras ver o resultado.
-    resolveEntre lim lim p11 m11
+    putStr("Assert resolve m325: " ++ show( resolvida p325 m325 == r325 )++"\n")
+    resolveEntre lim lim p325 m325
+    putStr("Assert resolve m270: " ++ show( resolvida p270 m270 == r270 )++"\n")
+    resolveEntre lim lim p270 m270
 
     --alguns testes antigos:
     --putStr( "\nresult: \n"++(showMatriz 0 0 t3) )
