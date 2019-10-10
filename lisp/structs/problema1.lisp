@@ -36,13 +36,17 @@
 ;------------------------------ B acima  -----------------------------------
 
 (defun main ()
-  ; A )
+  (write-line "A )")
   (setq p1 (make-Ponto2D :x 0 :y 0) )
   (setq p2 (make-Ponto2D :x 1 :y 0) )
-  (setq p3 (make-Ponto2D :x (- 0 1) :y 1) )
+  (setq p3 (make-Ponto2D :x (- 0 1) :y 0) )
   (write-line (write-to-string (distancia p1 p2 ) ) )
-  ; B )
+  (write-line "")
+  (write-line "B )")
   (write-line (write-to-string (colineares p1 p2 p3) ) )
+  (write-line "")
+  (write-line "C )")
+  (write-line (write-to-string (not (colineares p1 p2 p3) ) ) )
 )
 
 (main)
