@@ -138,29 +138,72 @@
 
 ;------------------------------ E abaixo -----------------------------------
 (defun elementos (arv)
-(cond
-  ((null arv) [])
-  (t
-    (+
-      1
-      (qtdElementos (no-esq arv))
-      (qtdElementos (no-dir arv))
+  (cond
+    ((null arv) ())
+    (t ; concaenate 'list (listas)
+      (concatenate 'list
+        (elementos (no-esq arv))
+        (cons (no-n arv) ())
+        (elementos (no-dir arv))
+      )
     )
   )
-)
 )
 ;------------------------------ E acima  -----------------------------------
 
 ;------------------------------ F abaixo -----------------------------------
+(defun substituir (arv x y)
+  (cond
+    ( (null arv) )
+    ( (= (no-n arv) x)
+      (progn
+        (setf (no-n arv) y)
+        (substituir (no-esq arv) x y)
+        (substituir (no-dir arv) x y)
+      )
+    )
+    ( (/= (no-n arv) x)
+      (substituir (no-esq arv) x y)
+      (substituir (no-dir arv) x y)
+    )
+  )
+)
 ;------------------------------ F acima  -----------------------------------
 
 ;------------------------------ G abaixo -----------------------------------
+(defun posordem (arv)
+  (cond
+    ((null arv) ())
+    (t ; concaenate 'list (listas)
+      (concatenate 'list
+        (posordem (no-esq arv))
+        (posordem (no-dir arv))
+        (cons (no-n arv) ())
+      )
+    )
+  )
+)
 ;------------------------------ G acima  -----------------------------------
 
 ;------------------------------ H abaixo -----------------------------------
+(defun emordem (arv)
+  (elementos arv)
+)
 ;------------------------------ H acima  -----------------------------------
 
 ;------------------------------ I abaixo -----------------------------------
+(defun preordem (arv)
+  (cond
+    ((null arv) ())
+    (t ; concaenate 'list (listas)
+      (concatenate 'list
+        (cons (no-n arv) ())
+        (preordem (no-esq arv))
+        (preordem (no-dir arv))
+      )
+    )
+  )
+)
 ;------------------------------ I acima  -----------------------------------
 
 ;------------------------------ J abaixo -----------------------------------
@@ -187,6 +230,23 @@
     (write-line (write-to-string (maioresQueElemento minhaArvore 65) ))
     (write-line "C )")
     (write-line (write-to-string (mediaElementos minhaArvore) ))
+    (write-line "D )")
+    (write-line (write-to-string (qtdElementos minhaArvore) ))
+    (write-line "E )")
+    (write-line (write-to-string (elementos minhaArvore) ))
+    (write-line "F )")
+    (substituir minhaArvore 54 2)
+    (substituir minhaArvore 66 2)
+    (write-line (write-to-string minhaArvore))
+    (write-line "G )")
+    (write-line (write-to-string (posordem minhaArvore) ))
+    (write-line "H )")
+    (write-line (write-to-string (emordem minhaArvore) ))
+    (write-line "I )")
+    (write-line (write-to-string (preordem minhaArvore) ))
+    (write-line "J )")
+    (write-line "K )")
+    (write-line "L )")
 )
 
 (main)
