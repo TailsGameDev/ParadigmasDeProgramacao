@@ -6,14 +6,14 @@
 
 (setq minhaArvore
     (make-no
-        :n 52
-        :esq (make-no :n 32               ;pode omitir o NIL
-                      :esq (make-no :n 12 :esq NIL :dir NIL)
-                      :dir (make-no :n 12 :esq NIL :dir NIL)
+        :n 1
+        :esq (make-no :n 1               ;pode omitir o NIL
+                      :esq (make-no :n 1 :esq NIL :dir NIL)
+                      :dir (make-no :n 1 :esq NIL :dir NIL)
              )
-        :dir (make-no :n 56
-                      :esq (make-no :n 55 :esq NIL :dir NIL)
-                      :dir (make-no :n 64 :esq NIL :dir NIL)
+        :dir (make-no :n 1
+                      :esq (make-no :n 1 :esq NIL :dir NIL)
+                      :dir (make-no :n 1 :esq NIL :dir NIL)
              )
     )
 )
@@ -207,12 +207,50 @@
 ;------------------------------ I acima  -----------------------------------
 
 ;------------------------------ J abaixo -----------------------------------
+#|
+(defun subtraiParesImpares (arv)
+    (setq um 1)
+    (cond
+      ( (null arv) 0)
+      ( (= (mod (no-n arv) 2) 0)
+        (+
+          (no-n arv)
+          (soma (no-esq arv))
+          (soma (no-dir arv))
+        )
+      )
+      ( t
+        (+
+          (- (no-n arv))
+          (+ (soma (no-esq arv)))
+          (+ (soma (no-dir arv)))
+        )
+      )
+    )
+)
+|#
+
+(defun subpi (larv)
+  (cond
+    ( (null larv) 0)
+    ( (= (mod (car larv) 2) 0) (+ (car larv) (subpi (cdr larv))) )
+    ( t (+ (- (car larv)) (subpi (cdr larv))))
+  )
+)
+
+(defun subtraiParesImpares (arv)
+  (subpi (emordem arv))
+)
 ;------------------------------ J acima  -----------------------------------
 
 ;------------------------------ K abaixo -----------------------------------
+(defun novoNo (x)
+  (make-no :n x)
+)
 ;------------------------------ K acima  -----------------------------------
 
 ;------------------------------ L abaixo -----------------------------------
+; O que eh um noh interno?
 ;------------------------------ L acima  -----------------------------------
 
 
@@ -245,7 +283,9 @@
     (write-line "I )")
     (write-line (write-to-string (preordem minhaArvore) ))
     (write-line "J )")
+    (write-line (write-to-string (subtraiParesImpares minhaArvore) ))
     (write-line "K )")
+    (write-line (write-to-string (novoNo 6) ))
     (write-line "L )")
 )
 
