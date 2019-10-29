@@ -2,9 +2,10 @@
 (setq e 0)
 (setq inf 99999999999)
 (setq o (- 1))
-(setq d 1)
-(setq indo t)
-(setq voltando nil)
+(setq di 1)
+(setq indo T)
+(setq voltando NIL)
+(setq tam 6)
 
 ;matrizes para testar ->
 (setq tamM 3)
@@ -19,14 +20,31 @@
                        (-1 -1 -1))) ;inicializando a matriz com alguns valores
 )
 
-(setq tamM1 5)
 (setf m1 (make-array `(5 5)
-	:initial-contents `((0 0 0 0 0)
-                      (0 3 1 2 0)
-                      (0 1 2 3 0)
-                      (0 2 1 3 0)
-                      (0 0 0 0 0)))
+  :initial-contents `((0  1  3  2 0)
+                      (1 -1 -1 -1 2)
+                      (3 -1 -1 -1 1)
+                      (2 -1 -1 -1 2)
+                      (0  2  1  2 0)))
 )
+
+
+(setf t1 (make-array `(5 5)
+  :initial-contents `((0  1  3  2 0)
+                      (1  1  2 -1 2)
+                      (3 -1 -1 -1 1)
+                      (2 -1 -1 -1 2)
+                      (0  2  1  2 0)))
+)
+
+(setf r1 (make-array `(5 5)
+  :initial-contents `((0 1 3 2 0)
+                      (1 3 1 2 2)
+                      (3 1 2 3 1)
+                      (2 2 3 1 2)
+                      (0 2 1 2 0)))
+)
+
 (setf vm1 (make-array `(5 5)
 	:initial-contents `((-1 -1 -1 -1 -1)
                       (-1  0  0  0 -1)
@@ -35,17 +53,43 @@
                       (-1 -1 -1 -1 -1)))
 )
 
-(setf m2 (make-array `(5 5)
+(setf v33 (make-array `(5 5)
+  :initial-contents `((-1 -1 -1 -1 -1)
+                      (-1  0  0  0 -1)
+                      (-1  0  0  0 -1)
+                      (-1  0  0  0 -1)
+                      (-1 -1 -1 -1 -1)))
+)
+
+(setf v44 (make-array `(6 6)
+  :initial-contents `((-1 -1 -1 -1 -1 -1)
+                      (-1  0  0  0  0 -1)
+                      (-1  0  0  0  0 -1)
+                      (-1  0  0  0  0 -1)
+                      (-1  0  0  0  0 -1)
+                      (-1 -1 -1 -1 -1 -1)))
+)
+
+(setf m2 (make-array `(4 4)
 	:initial-contents `((0 2 1 0)
                       (2 o o 1)
                       (1 o o 2)
                       (0 1 2 0)))
 )
-(setf r2 (make-array `(5 5)
+(setf r2 (make-array `(4 4)
 	:initial-contents `((0 2 1 0)
                       (2 1 2 1)
                       (1 2 1 2)
                       (0 1 2 0)))
+)
+
+(setf m3 (make-array `(6 6)
+  :initial-contents `((0  0  3  2  0 0)
+                      (4 -1 -1 -1 -1 0)
+                      (0 -1 -1 -1 -1 0)
+                      (3 -1 -1 -1 -1 0)
+                      (0 -1 -1 -1 -1 0)
+                      (0  0  0  0  0 0)))
 )
 
 (defun maior (a)
@@ -61,7 +105,14 @@
 )
 ;----------------------------P2 abaixo ------------------------
 (defun mp (p)
-  (first (last p))
+  (car (last p))
+)
+
+(defun getI (i lista)
+  (if (= i 0)
+    (car lista)
+    (getI (- i 1) (cdr lista))
+  )
 )
 
 (defun printMatriz (m tm)
@@ -81,17 +132,17 @@
   (write-line (write-to-string s))
 )
 
-(defun backX (x m tam)
+(defun backX (x)
   (cond
     ((<= x 1) (- tam 2) )
-    ((t) (- x 1) )
+    (t (- x 1) )
   )
 )
 
-(defun nextX (x m tam)
+(defun nextX (x)
   (cond
-    ((>= x (- tam 2)) 1 )
-    ((t) (+ x 1) )
+    ((>= x (- tam 2)) 1)
+    (t (+ x 1))
   )
 )
 
@@ -99,14 +150,15 @@
   (cond
     ( (and (<= x 1) (>= y 2)) (- y 1) )
     ( (and (<= x 1) (<  y 2)) (- y 1) ) ;erro: quer voltar mas tah no inicio
+    (t y)
   )
 )
 
-(defun nextY (x y tam)
+(defun nextY (x y)
   (cond
     ( (and (>= x (- tam 2)) (<= y (- tam 3) ) ) (+ y 1) )
     ( (and (>= x (- tam 2)) (>= y (- tam 3) ) ) (- 0 1) ) ; chegou no final!!! troquei aqui de > para >=. se bugar pode ser isso. Boa sorte Cainã do futuro
-    ( (t) y )
+    (t y)
   )
 )
 
@@ -124,7 +176,7 @@
 
 (defun jaTemNaLinha (n x y m)
 	(cond
-		((= x 0) NIL)
+		((= x 1) NIL)
 		((= n (getxym (- x 1) y m)) T)
 		(t (jaTemNaLinha n (- x 1) y m))
 	)
@@ -132,23 +184,23 @@
 
 (defun jaTemNaColuna (n x y m)
 	(cond
-		((= y 0) NIL)
-		((= n (getxym x y m)) T)
+		((= y 1) NIL)
+		((= n (getxym x (- y 1) m)) T)
 		(t (jaTemNaColuna n x (- y 1) m))
 	)
 )
 
 (defun jaTemNaDiagonalPrincipal (n x y m)
 	(cond
-		((= y 0) NIL)
+		((= y 1) NIL)
 		((= n (getxym x y m)) T)
-		(t (jaTemNaDiagonalPrincipal m (- x 1) (- y 1)))
+		(t (jaTemNaDiagonalPrincipal m (- x 1) (- y 1) m))
 	)
 )
 
 (defun jaTemNaDiagonalSecundaria (n x y m)
 	(cond
-		((= y 0) NIL)
+		((= y 1) NIL)
 		((= n (getxym x y m)) T)
 		(t (jaTemNaDiagonalSecundaria n (+ x 1) (- y 1) m))
 	)
@@ -157,7 +209,7 @@
 (defun jaTemNasDiagonais (n x y m)
   (setq sec (= (+ x y) (- tam 1))) ; eh uma booleana que diz se tah na diagonal secundaria
   (cond
-    ( (= y 0) nil)
+    ( (= y 1) NIL)
     ( (= n (getxym x y m)) t)
     ((and (= x y) sec)
       (or
@@ -166,34 +218,34 @@
       )
     )
     ((= x y) (jaTemNaDiagonalPrincipal n (- x 1) (- y 1) m))
-    ((sec) (jaTemNaDiagonalSecundaria n (+ x 1) (- y 1) m))
-    ( (and (not (= x y)) (not sec)) (nil)) ; se chamar pra uma posicao fora das diagonais, retorna nil, indicando q tah suavee
+    (sec (jaTemNaDiagonalSecundaria n (+ x 1) (- y 1) m))
+    ((and (not (= x y)) (not sec)) NIL); se chamar pra uma posicao fora das diagonais, retorna nil, indicando q tah suavee
   )
 )
 
 (defun linhaCerta (y m tam)
   (setq esq (getxym 0 y m)) ;numeros esq e dir dos lados da matriz (exigências)
   (setq dir (getxym (- tam 1) y m))
-  (setq qvdd ( quantosVejoDaDireita (- tam 2) y m inf))
-  (setq qvde (quantosVejoDaEsquerda 1 y m inf))
+  (setq qvdd ( quantosVejoDaDireita (- tam 1) y m 0))
+  (setq qvde (quantosVejoDaEsquerda 0 y m 0))
   (cond
     ( (and (= esq e) (= dir e)) t) ; e eh o valor padrao de sem exigência
     ( (= esq e) (= dir qvdd) )
     ( (= dir e) (= esq qvde) )
-    ( (t) (and (= dir qvdd) (= esq qvde)) )
+    ( t (and (= dir qvdd) (= esq qvde)) )
   )
 )
 
 (defun colunaCerta (x m tam)
   (setq cima  (getxym x 0 m))
   (setq baixo (getxym x (- tam 1) m))
-  (setq qvdc (quantosVejoDeCima x 1 m inf) )
-  (setq qvdb (quantosVejoDeBaixo x (- tam 2) m inf) )
+  (setq qvdc (quantosVejoDeCima x 0 m 0) )
+  (setq qvdb (quantosVejoDeBaixo x (- tam 1) m 0) )
   (cond
-    ((and (= cima e) (= baixo e)) t)
+    ((and (= cima e) (= baixo e)) T)
     ((= cima  e) (= baixo qvdb))
     ((= baixo e) (= cima  qvdc))
-    ((t) (and (= baixo qvdb) (= cima  qvdc)))
+    (t (and (= baixo qvdb) (= cima  qvdc)))
   )
 )
 
@@ -259,50 +311,63 @@
 )
 
 (defun tahOk (x y m)
-  (setq sec (= (+ x y) (- tam 1))) ; eh uma booleana que diz se tah na diagonal secundaria
-  (setq num (getxym x y m))
-	(setq vc (vejoCerto x y m))
-  (setXY o x y m)
-	(setq ntl (not (jaTemNaLinha num x y m)))
-  (setq ntc (not (jaTemNaColuna num x y m)))
-  (setq ntd (not (jaTemNasDiagonais num x y m))) ; ---------------implementar essa
-  (setXY num x y m)
-	(cond
-    ( (and (= (getxym 0 0 m) d) (or (= x y) sec) )
-      (and vc ntl ntc ntd)
-    )
-    ( (t) (and vc ntl ntc) )
+  (progn
+    (setq num (getxym x y m))
+  	(setq vc (vejoCerto x y m))
+    (setXY o x y m)
+  	(setq ntl (not (jaTemNaLinha num x y m)))
+    (setq ntc (not (jaTemNaColuna num x y m)))
+    (setq ntd (not (jaTemNasDiagonais num x y m)))
+    (setXY num x y m)
+    (and vc ntl ntc (or ntd (/= (getxym 0 0 m) di)))
   )
 )
 
 ;k= limiteDaRecursao, x, y, m, v=matrizGuardaIndexNoVetorDePossiveis,
 ;p=listaDeNumerosPossiveis[100% constante] d=RepetiçãoEhProibidaNasDiagonais
-(defun resolve (k x y m v p d)
+(defun resolve (k x y m v p s)
+  (printMatriz m tam)
   (setq posConstante (= (- 1) (getxym x y v)))
-  (cond
-    ((<= k 0) m) ;escolher m ou v para retornar (chegou no limite da recursão)
-    ((< y 0) m) ;escolher m ou v para retornar (terminou com sucesso)
-    ( (and posConstante (= d indo))
-      (resolve (- k 1) (nextX x m) (nextY x y m) m v p indo)
-    )
-    ( (and posConstante (= d voltando))
-      (resolve (- k 1) (backX x m) (backY x y) m v p voltando)
-    )
-    ( (>= (getxym x y m) (mp p))
-      (setXY o x y m)
-      (setXY 0 x y v)
-      (resolve (k-1) (backX x m) (backY x y) m v p voltando)
+  (setq m-anterior (getxym x y m))
+  (setq v-anterior (getxym x y v))
+  (progn
+    (setXY (getI (getxym x y v) p) x y m)
+    (setXY (+ (getxym x y v) 1) x y v)
+    ; (printMatriz m-anterior tam)
+    (cond
+      ((<= k 0) m) ;escolher m ou v para retornar (chegou no limite da recursão)
+      ((and posConstante (= s indo))
+        (progn
+          (setXY m-anterior x y m)
+          (setXY v-anterior x y v)
+          (resolve (- k 1) (nextX x) (nextY x y) m v p indo)
+        )
+      )
+      ( (and posConstante (= s voltando))
+        (setXY m-anterior x y m)
+        (setXY v-anterior x y v)
+        (resolve (- k 1) (backX x) (backY x y) m-anterior v-anterior p voltando)
+      )
+      ((not (getxym x y m))
+        (progn
+          (setXY o x y m)
+          (setXY 0 x y v)
+          (resolve (- k 1) (backX x) (backY x y) m v p voltando)
+        )
+      )
+      ((tahOk x y m) (resolve (- k 1) (nextX x) (nextY x y) m v p s))
+      ((not (tahOk x y m)) (resolve (- k 1) x y m v p s))
     )
   )
   ; velho, esses testes de cima presumem a matriz inalterada
-  (setXY (nth (getxym x y v) p) x y m)
-  ( (tahOk x y (setXY (p!!(getxym x y v)) x y m )))
+  ;(setXY (nth (getxym x y v) p) x y m)
+  ;( (tahOk x y (setXY (p!!(getxym x y v)) x y m )))
 )
 
-    --tudo certo (tahOk!), substitui e bola pra frente
-    | tahOk x y (setXY (p!!(getxym x y v)) x y m ) = resolve (k-1) (nextX x m) (nextY x y m) (setXY (p!!(getxym x y v)) x y m ) (setXY ((getxym x y v) +1) x y v ) p indo
-    -- não tahOk, tente o próximo número na lista de números possíveis
-    | not (tahOk x y (setXY (p!!(getxym x y v)) x y m )) = resolve (k-1) x y (setXY (p!!(getxym x y v)) x y m ) (setXY (( (getxym x y v) +1) ) x y v ) p indo
+;    --tudo certo (tahOk!), substitui e bola pra frente
+;    | tahOk x y (setXY (p!!(getxym x y v)) x y m ) = resolve (k-1) (nextX x m) (nextY x y m) (setXY (p!!(getxym x y v)) x y m ) (setXY ((getxym x y v) +1) x y v ) p indo
+;    -- não tahOk, tente o próximo número na lista de números possíveis
+;    | not (tahOk x y (setXY (p!!(getxym x y v)) x y m )) = resolve (k-1) x y (setXY (p!!(getxym x y v)) x y m ) (setXY (( (getxym x y v) +1) ) x y v ) p indo
 
 
 ;----------------------------P2 acima ------------------------
@@ -318,9 +383,18 @@
 
     ;(write-line (write-to-string (maior m)))
 
-    (printMatriz m1 tamM1)
-    (imprima (nextY 1 2 3))
-    (imprima (getxym 1 1 m1))
+    (resolve 10000 1 1 m3 v44 `(1 2 3 4) T)
+
+    ; (imprima (tahOk 2 1 t1))
+
+    ; (imprima (nextX 1))
+    ; (imprima (nextY 1 1))
+
+    ; (printMatriz t1 tam)
+
+    ; (imprima (quantosVejoDeCima 2 1 t1 0))
+    ; (imprima (quantosVejoDaEsquerda 0 1 t1 0))
+
 )
 
 
