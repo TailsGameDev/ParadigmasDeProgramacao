@@ -6,6 +6,7 @@
 (setq indo T)
 (setq voltando NIL)
 (setq tam 6)
+(setq limite 10000)
 
 ;matrizes para testar ->
 (setq tamM 3)
@@ -77,26 +78,37 @@
                       (-1 -1 -1 -1 -1 -1)))
 )
 
-(setf m2 (make-array `(4 4)
-	:initial-contents `((0  2  1 0)
-                      (2 -1 -1 1)
-                      (1 -1 -1 2)
-                      (0  1  2 0)))
-)
-
-(setf v2 (make-array `(4 4)
-  :initial-contents `((-1 -1 -1 -1)
-                      (-1  0  0 -1)
-                      (-1  0  0 -1)
-                      (-1 -1 -1 -1)))
-)
-
-(setf r2 (make-array `(4 4)
-	:initial-contents `((0 2 1 0)
-                      (2 1 2 1)
-                      (1 2 1 2)
-                      (0 1 2 0)))
-)
+;-------------------------------M2---------------------------------
+(setf p2 `(1 2))
+(setf m2 (make-array `(4 4)	:initial-contents `((0  2  1 0)
+                                                (2 -1 -1 1)
+                                                (1 -1 -1 2)
+                                                (0  1  2 0))))
+(setf v2 (make-array `(4 4) :initial-contents `((-1 -1 -1 -1)
+                                                (-1  0  0 -1)
+                                                (-1  0  0 -1)
+                                                (-1 -1 -1 -1))))
+(setf r2 (make-array `(4 4) 	:initial-contents `((0 2 1 0)
+                                                  (2 1 2 1)
+                                                  (1 2 1 2)
+                                                  (0 1 2 0))))
+;-----------------------------M3-----------------------------------
+(setf cp3 `(1 2 3))
+(setf cm3 (make-array `(5 5) :initial-contents `(( 0  2  2  1  0)
+                                                 ( 3  0  0  0  1)
+                                                 ( 1  0  0  0  2)
+                                                 ( 2  0  0  0  2)
+                                                 ( 0  2  1  3  0))))
+(setf cr3 (make-array `(5 5) :initial-contents `(( 0  2  2  1  0)
+                                                  ( 3  1  2  3  1)
+                                                  ( 1  3  1  2  2)
+                                                  ( 2  2  3  1  2)
+                                                  ( 0  2  1  3  0))))
+(setf cv3 (make-array `(5 5) :initial-contents `((-1 -1 -1 -1 -1)
+                                                 (-1  0  0  0 -1)
+                                                 (-1  0  0  0 -1)
+                                                 (-1  0  0  0 -1)
+                                                 (-1 -1 -1 -1 -1))))
 
 (setf m3 (make-array `(6 6)
   :initial-contents `((0  0  3  2  0 0)
@@ -107,18 +119,6 @@
                       (0  0  0  0  0 0)))
 )
 
-(defun maior (a)
-    (setq m (aref a 0 0)) ;aref permite acessar uma posição i j da matriz, neste caso acesso a posição 0,0 da matriz a
-    (dotimes (i 3) ;dotimes permite realizar um número fixo de iterações
-        (dotimes (j 3)
-            (if (> (aref a i j) m)
-                (setq m (aref a i j))
-            )
-        )
-    )
-    m ;é o retorno da minha função
-)
-;----------------------------P2 abaixo ------------------------
 (defun mp (p)
   (car (last p))
 )
@@ -334,7 +334,9 @@
     (setq ntc (not (jaTemNaColuna num x y m)))
     (setq ntd (not (jaTemNasDiagonais num x y m)))
     (setXY num x y m)
-    (and vc ntl ntc (or ntd (/= (getxym 0 0 m) di)))
+    (setq lc (or (< x (- tam 2))  (linhaCerta y m tam)) )
+    (setq cc (or (< y (- tam 2)) (colunaCerta x m tam)) )
+    (and vc ntl ntc (or ntd (/= (getxym 0 0 m) di)) lc cc)
   )
 )
 
@@ -375,16 +377,7 @@
       ((not (tahOk x y m)) (resolve (- k 1) x y m v p s))
     )
   )
-  ; velho, esses testes de cima presumem a matriz inalterada
-  ;(setXY (nth (getxym x y v) p) x y m)
-  ;( (tahOk x y (setXY (p!!(getxym x y v)) x y m )))
 )
-
-;    --tudo certo (tahOk!), substitui e bola pra frente
-;    | tahOk x y (setXY (p!!(getxym x y v)) x y m ) = resolve (k-1) (nextX x m) (nextY x y m) (setXY (p!!(getxym x y v)) x y m ) (setXY ((getxym x y v) +1) x y v ) p indo
-;    -- não tahOk, tente o próximo número na lista de números possíveis
-;    | not (tahOk x y (setXY (p!!(getxym x y v)) x y m )) = resolve (k-1) x y (setXY (p!!(getxym x y v)) x y m ) (setXY (( (getxym x y v) +1) ) x y v ) p indo
-
 
 (defun igual (m r x y)
   (cond
@@ -396,46 +389,25 @@
 
 (defun testa (m r v p d texto)
   (setq ans (resolve limite 1 1 m v p d))
-  ;(concatenate string "resolvida: " texto)
   (cond
-    ( (igual ans r 1 1) (concatenate 'string "resolvida: " texto) )
-    ( t (concatenate string "errada: " texto) )
+    ( (igual ans r 1 1) (concatenate `string "resolvida: " texto) )
+    ( t (concatenate `string "errada: " texto) )
   )
 )
 
-(setq limite 10000)
-
-;----------------------------P2 acima ------------------------
 (defun main()
-    ;(write-line (write-to-string m)) ;imprimindo uma matriz
 
-    ;(write-line (write-to-string (aref m 0 0)))
-    ;(write-line (write-to-string (aref m 1 1)))
-
-    ;(write-line (write-to-string (maior m))) ;passando uma matriz como parâmetro
-
-    ;(setf (aref x 0 1) (- 3)) ;alrerando o elemento da posição 0,1 para 33
-
-    ;(write-line (write-to-string (maior m)))
-
-    ;(resolve 10000 1 1 m3 v44 `(1 2 3 4) T)
     ;(setq tam 6)
     ;( printMatriz (resolve 10000 1 1 m3 v44 `(1 2 3 4) T) tam )
     (setq tam 4)
-    (imprima (testa m2 r2 v2 `(1 2) T " m2."))
+    (imprima (testa m2 r2 v2 `(1 2) NIL " m2."))
+    (setq tam 5)
+    (imprima (testa cm3 cr3 cv3 cp3 NIL " cm3."))
 
     ;se bugar tenta usar def-var. Compilar antes de apresentar:
     ;clisp -c caina.lisp eeeee clisp caina.fas
 
     ; (imprima (tahOk 2 1 t1))
-
-    ; (imprima (nextX 1))
-    ; (imprima (nextY 1 1))
-
-    ; (printMatriz t1 tam)
-
-    ; (imprima (quantosVejoDeCima 2 1 t1 0))
-    ; (imprima (quantosVejoDaEsquerda 0 1 t1 0))
 
 )
 
