@@ -53,6 +53,13 @@
                       (-1 -1 -1 -1 -1)))
 )
 
+(setf v22 (make-array `(4 4)
+  :initial-contents `((-1 -1 -1 -1)
+                      (-1  0  0 -1)
+                      (-1  0  0 -1)
+                      (-1 -1 -1 -1)))
+)
+
 (setf v33 (make-array `(5 5)
   :initial-contents `((-1 -1 -1 -1 -1)
                       (-1  0  0  0 -1)
@@ -71,11 +78,19 @@
 )
 
 (setf m2 (make-array `(4 4)
-	:initial-contents `((0 2 1 0)
-                      (2 o o 1)
-                      (1 o o 2)
-                      (0 1 2 0)))
+	:initial-contents `((0  2  1 0)
+                      (2 -1 -1 1)
+                      (1 -1 -1 2)
+                      (0  1  2 0)))
 )
+
+(setf v2 (make-array `(4 4)
+  :initial-contents `((-1 -1 -1 -1)
+                      (-1  0  0 -1)
+                      (-1  0  0 -1)
+                      (-1 -1 -1 -1)))
+)
+
 (setf r2 (make-array `(4 4)
 	:initial-contents `((0 2 1 0)
                       (2 1 2 1)
@@ -326,7 +341,7 @@
 ;k= limiteDaRecursao, x, y, m, v=matrizGuardaIndexNoVetorDePossiveis,
 ;p=listaDeNumerosPossiveis[100% constante] d=RepetiçãoEhProibidaNasDiagonais
 (defun resolve (k x y m v p s)
-  (printMatriz m tam)
+  ;(printMatriz m tam)
   (setq posConstante (= (- 1) (getxym x y v)))
   (setq m-anterior (getxym x y m))
   (setq v-anterior (getxym x y v))
@@ -355,6 +370,7 @@
           (resolve (- k 1) (backX x) (backY x y) m v p voltando)
         )
       )
+      ((and (<= (nextY x y) (- 1)) (tahOk x y m)) m) ; resolveu
       ((tahOk x y m) (resolve (- k 1) (nextX x) (nextY x y) m v p s))
       ((not (tahOk x y m)) (resolve (- k 1) x y m v p s))
     )
@@ -370,6 +386,25 @@
 ;    | not (tahOk x y (setXY (p!!(getxym x y v)) x y m )) = resolve (k-1) x y (setXY (p!!(getxym x y v)) x y m ) (setXY (( (getxym x y v) +1) ) x y v ) p indo
 
 
+(defun igual (m r x y)
+  (cond
+    ((= y (- 1)) t)
+    ( (= (getxym x y m) (getxym x y r)) (igual m r (nextX x) (nextY x y)) )
+    (t nil)
+  )
+)
+
+(defun testa (m r v p d texto)
+  (setq ans (resolve limite 1 1 m v p d))
+  ;(concatenate string "resolvida: " texto)
+  (cond
+    ( (igual ans r 1 1) (concatenate 'string "resolvida: " texto) )
+    ( t (concatenate string "errada: " texto) )
+  )
+)
+
+(setq limite 10000)
+
 ;----------------------------P2 acima ------------------------
 (defun main()
     ;(write-line (write-to-string m)) ;imprimindo uma matriz
@@ -383,7 +418,14 @@
 
     ;(write-line (write-to-string (maior m)))
 
-    (resolve 10000 1 1 m3 v44 `(1 2 3 4) T)
+    ;(resolve 10000 1 1 m3 v44 `(1 2 3 4) T)
+    ;(setq tam 6)
+    ;( printMatriz (resolve 10000 1 1 m3 v44 `(1 2 3 4) T) tam )
+    (setq tam 4)
+    (imprima (testa m2 r2 v2 `(1 2) T " m2."))
+
+    ;se bugar tenta usar def-var. Compilar antes de apresentar:
+    ;clisp -c caina.lisp eeeee clisp caina.fas
 
     ; (imprima (tahOk 2 1 t1))
 
