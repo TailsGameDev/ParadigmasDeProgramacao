@@ -109,6 +109,26 @@
                                                  (-1  0  0  0 -1)
                                                  (-1  0  0  0 -1)
                                                  (-1 -1 -1 -1 -1))))
+;-----------------------------M8-----------------------------------
+(setf cp8 `(1 2 3 4))
+(setf cm8 (make-array `(6 6) :initial-contents `(( 1  0  0  0  0  0)
+                                                 ( 0 -1 -1 -1 -1  0)
+                                                 ( 0 -1 -1 -1 -1  0)
+                                                 ( 0 -1 -1 -1 -1  0)
+                                                 ( 0 -1 -1 -1 -1  2)
+                                                 ( 0  0  0  0  4  0))))
+(setf cr8 (make-array `(6 6) :initial-contents `(( 1  0  0  0  0  0)
+                                                 ( 0  2  3  1  4  0)
+                                                 ( 0  1  4  2  3  0)
+                                                 ( 0  4  1  3  2  0)
+                                                 ( 0  3  2  4  1  2)
+                                                 ( 0  0  0  0  4  0))))
+(setf cv8 (make-array `(6 6) :initial-contents `((-1 -1 -1 -1 -1 -1)
+                                                 (-1  0  0  0  0 -1)
+                                                 (-1  0  0  0  0 -1)
+                                                 (-1  0  0  0  0 -1)
+                                                 (-1  0  0  0  0 -1)
+                                                 (-1 -1 -1 -1 -1 -1))))
 
 (setf m3 (make-array `(6 6)
   :initial-contents `((0  0  3  2  0 0)
@@ -343,7 +363,7 @@
 ;k= limiteDaRecursao, x, y, m, v=matrizGuardaIndexNoVetorDePossiveis,
 ;p=listaDeNumerosPossiveis[100% constante] d=RepetiçãoEhProibidaNasDiagonais
 (defun resolve (k x y m v p s)
-  ;(printMatriz m tam)
+  (printMatriz m tam)
   (setq posConstante (= (- 1) (getxym x y v)))
   (setq m-anterior (getxym x y m))
   (setq v-anterior (getxym x y v))
@@ -399,10 +419,18 @@
 
     ;(setq tam 6)
     ;( printMatriz (resolve 10000 1 1 m3 v44 `(1 2 3 4) T) tam )
-    (setq tam 4)
-    (imprima (testa m2 r2 v2 `(1 2) NIL " m2."))
-    (setq tam 5)
-    (imprima (testa cm3 cr3 cv3 cp3 NIL " cm3."))
+
+    ;testes passando
+    ;(setq tam 4)
+    ;(imprima (testa m2 r2 v2 `(1 2) NIL " m2."))
+    ;(setq tam 5)
+    ;(imprima (testa cm3 cr3 cv3 cp3 NIL " cm3."))
+
+    (setq tam 6)
+    (resolve 10000 1 1 cm8 cv8 `(1 2 3 4) T)
+    ;( printMatriz (resolve 10000 1 1 cm8 cv8 `(1 2 3 4) T) tam )
+    ;(setq tam 6)
+    ;(imprima (testa cm8 cr8 cv8 cp8 T " cm8."))
 
     ;se bugar tenta usar def-var. Compilar antes de apresentar:
     ;clisp -c caina.lisp eeeee clisp caina.fas
