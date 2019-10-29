@@ -95,9 +95,9 @@
 ;-----------------------------M3-----------------------------------
 (setf cp3 `(1 2 3))
 (setf cm3 (make-array `(5 5) :initial-contents `(( 0  2  2  1  0)
-                                                 ( 3  0  0  0  1)
-                                                 ( 1  0  0  0  2)
-                                                 ( 2  0  0  0  2)
+                                                 ( 3 -1 -1 -1  1)
+                                                 ( 1 -1 -1 -1  2)
+                                                 ( 2 -1 -1 -1  2)
                                                  ( 0  2  1  3  0))))
 (setf cr3 (make-array `(5 5) :initial-contents `(( 0  2  2  1  0)
                                                   ( 3  1  2  3  1)
@@ -109,6 +109,26 @@
                                                  (-1  0  0  0 -1)
                                                  (-1  0  0  0 -1)
                                                  (-1 -1 -1 -1 -1))))
+;-----------------------------M4-----------------------------------
+(setf cp4 `(0 1 2 3))
+(setf cm4 (make-array `(6 6) :initial-contents `(( 0  2  2  1  2  0)
+                                                 ( 2 -1 -1 -1 -1  2)
+                                                 ( 2 -1 -1 -1 -1  2)
+                                                 ( 3 -1 -1 -1 -1  1)
+                                                 ( 1 -1 -1 -1 -1  3)
+                                                 ( 0  1  2  3  1  0))))
+(setf cr4 (make-array `(6 6) :initial-contents  `(( 0  2  2  2  1  0)
+                                                  ( 3  0  1  3  2  1)
+                                                  ( 1  2  3  0  1  2)
+                                                  ( 1  1  0  2  3  2)
+                                                  ( 2  3  2  1  0  2)
+                                                  ( 0  2  1  1  3  0))))
+(setf cv4 (make-array `(6 6) :initial-contents `((-1 -1 -1 -1 -1 -1)
+                                                 (-1  0  0  0  0 -1)
+                                                 (-1  0  0  0  0 -1)
+                                                 (-1  0  0  0  0 -1)
+                                                 (-1  0  0  0  0 -1)
+                                                 (-1 -1 -1 -1 -1 -1))))
 ;-----------------------------M8-----------------------------------
 (setf cp8 `(1 2 3 4))
 (setf cm8 (make-array `(6 6) :initial-contents `(( 1  0  0  0  0  0)
@@ -363,7 +383,7 @@
 ;k= limiteDaRecursao, x, y, m, v=matrizGuardaIndexNoVetorDePossiveis,
 ;p=listaDeNumerosPossiveis[100% constante] d=RepetiçãoEhProibidaNasDiagonais
 (defun resolve (k x y m v p s)
-  (printMatriz m tam)
+  ;(printMatriz m tam)
   (setq posConstante (= (- 1) (getxym x y v)))
   (setq m-anterior (getxym x y m))
   (setq v-anterior (getxym x y v))
@@ -385,7 +405,8 @@
         (setXY v-anterior x y v)
         (resolve (- k 1) (backX x) (backY x y) m-anterior v-anterior p voltando)
       )
-      ((not (getxym x y m))
+      ;((not (getxym x y m)) substitui essa linha pela de baixo
+      ((= v-anterior (mp p))
         (progn
           (setXY o x y m)
           (setXY 0 x y v)
@@ -421,21 +442,22 @@
     ;( printMatriz (resolve 10000 1 1 m3 v44 `(1 2 3 4) T) tam )
 
     ;testes passando
-    ;(setq tam 4)
-    ;(imprima (testa m2 r2 v2 `(1 2) NIL " m2."))
-    ;(setq tam 5)
-    ;(imprima (testa cm3 cr3 cv3 cp3 NIL " cm3."))
+    (setq tam 4)
+    (imprima (testa m2 r2 v2 `(1 2) NIL " m2."))
+    (setq tam 5)
+    (imprima (testa cm3 cr3 cv3 cp3 NIL " cm3."))
 
+    ;problemas
     (setq tam 6)
-    (resolve 10000 1 1 cm8 cv8 `(1 2 3 4) T)
+    (imprima (testa cm4 cr4 cv4 cp4 NIL " cm4."))
+    ;(resolve 10000 1 1 cm8 cv8 `(1 2 3 4) T)
     ;( printMatriz (resolve 10000 1 1 cm8 cv8 `(1 2 3 4) T) tam )
     ;(setq tam 6)
     ;(imprima (testa cm8 cr8 cv8 cp8 T " cm8."))
 
+    ; uma dica loca do Ezequiel:
     ;se bugar tenta usar def-var. Compilar antes de apresentar:
     ;clisp -c caina.lisp eeeee clisp caina.fas
-
-    ; (imprima (tahOk 2 1 t1))
 
 )
 
