@@ -6,7 +6,7 @@
 (setq indo T)
 (setq voltando NIL)
 (setq tam 6)
-(setq limite 10000)
+(setq limite 100000000)
 
 ;matrizes para testar ->
 (setq tamM 3)
@@ -171,6 +171,29 @@
                                                  (-1  0  0  0  0 -1)
                                                  (-1  0  0  0  0 -1)
                                                  (-1 -1 -1 -1 -1 -1))))
+;-----------------------------M233-----------------------------------
+(setf cp233 `(1 2 3 4 5))
+(setf cm233 (make-array `(7 7) :initial-contents `(( 0  1  4  0  0  0  0)
+                                                   ( 0 -1 -1 -1 -1 -1  4)
+                                                   ( 0 -1 -1 -1 -1 -1  3)
+                                                   ( 3 -1 -1 -1 -1 -1  0)
+                                                   ( 0 -1 -1 -1 -1 -1  0)
+                                                   ( 2 -1 -1 -1 -1 -1  0)
+                                                   ( 0  0  1  2  2  3  0))))
+(setf cr233 (make-array `(7 7) :initial-contents `(( 0  1  4  0  0  0  0)
+                                                   ( 0  5  1  4  3  2  4)
+                                                   ( 0  1  2  5  4  3  3)
+                                                   ( 3  3  4  2  1  5  0)
+                                                   ( 0  2  3  1  5  4  0)
+                                                   ( 2  4  5  3  2  1  0)
+                                                   ( 0  0  1  2  2  3  0))))
+(setf cv233 (make-array `(7 7) :initial-contents `((-1 -1 -1 -1 -1 -1 -1)
+                                                 (-1  0  0  0  0  0 -1)
+                                                 (-1  0  0  0  0  0 -1)
+                                                 (-1  0  0  0  0  0 -1)
+                                                 (-1  0  0  0  0  0 -1)
+                                                 (-1  0  0  0  0  0 -1)
+                                                 (-1 -1 -1 -1 -1 -1 -1))))
 
 (setf m3 (make-array `(6 6)
   :initial-contents `((0  0  3  2  0 0)
@@ -405,7 +428,7 @@
 ;k= limiteDaRecursao, x, y, m, v=matrizGuardaIndexNoVetorDePossiveis,
 ;p=listaDeNumerosPossiveis[100% constante] d=RepetiçãoEhProibidaNasDiagonais
 (defun resolve (k x y m v p s)
-  ;(printMatriz m tam)
+  (printMatriz m tam)
   (setq posConstante (= (- 1) (getxym x y v)))
   (setq m-anterior (getxym x y m))
   (setq v-anterior (getxym x y v))
@@ -419,14 +442,14 @@
     ;(imprima 59)
     ; (printMatriz m-anterior tam)
     ; (imprima (and (tahOk x y m) (= y (- tam 2)) (= x (- tam 2))))
-    (imprima x)
-    (imprima y)
-    (imprima m)
+    ;(imprima x)
+    ;(imprima y)
+    ;(imprima m)
     (cond
       ((<= k 0) m) ;escolher m ou v para retornar (chegou no limite da recursão)
       ((and posConstante (= s indo))
         (progn
-          (imprima 687)
+          ;(imprima 687)
           (setXY m-anterior x y m)
           (setXY v-anterior x y v)
           (resolve (- k 1) (nextX x) (nextY x y) m v p indo)
@@ -434,7 +457,7 @@
       )
       ( (and posConstante (= s voltando))
         (progn
-          (imprima 554)
+          ;(imprima 554)
           (setXY m-anterior x y m)
           (setXY v-anterior x y v)
           (resolve (- k 1) (backX x) (backY x y) m v p voltando)
@@ -443,7 +466,7 @@
       ((not (getxym x y m)) ; substitui essa linha pela de baixo
       ;((= v-anterior (mp p))
         (progn
-          (imprima 58)
+          ;(imprima 58)
           (setXY o x y m)
           (setXY 0 x y v)
           (resolve (- k 1) (backX x) (backY x y) m v p voltando)
@@ -478,15 +501,21 @@
     ;( printMatriz (resolve 10000 1 1 m3 v44 `(1 2 3 4) T) tam )
 
     ;testes passando
-    ; (setq tam 4)
-    ; (imprima (testa m2 r2 v2 `(1 2) NIL " m2."))
-    ; (setq tam 5)
-    ; (imprima (testa cm3 cr3 cv3 cp3 NIL " cm3."))
+    (setq tam 4)
+    (imprima (testa m2 r2 v2 `(1 2) NIL " m2."))
+    (setq tam 7)
+    ;(imprima (testa cm3 cr3 cv3 cp3 NIL " cm3."))
+    ;( printMatriz (resolve 10000 1 1 cm3 cv3 `(1 2 3 4) T) tam )
+    ( printMatriz (resolve 9000000 1 1 cm233 cv233 cp233 T) tam )
+
 
     ;problemas
-    (setq tam 6)
+    ;(setq tam 6)
     ;(imprima (testa cm4 cr4 cv4 cp4 NIL " cm4."))
-    (resolve 10000 1 1 cm9 v44 `(1 2 3 4) T)
+    ;(resolve 10000 1 1 cm9 v44 `(1 2 3 4) T)
+
+    ;(setq tam 6)
+    ;( printMatriz (resolve 10000 1 1 cm8 cv8 `(1 2 3 4) T) tam )
     ;( printMatriz (resolve 10000 1 1 cm8 cv8 `(1 2 3 4) T) tam )
     ;(setq tam 6)
     ;(imprima (testa cm8 cr8 cv8 cp8 T " cm8."))
