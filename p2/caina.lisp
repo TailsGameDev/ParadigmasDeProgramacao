@@ -9,76 +9,6 @@
 (defvar limite 100000000)
 (defvar c (- 2))
 
-;matrizes para testar ->
-(setq tamM 3)
-(setf M (make-array '(3 3) ;criando uma matriz 3x3
-   :initial-contents '((0 1 2)
-                       (3 4 5)
-                       (6 7 8))) ;inicializando a matriz com alguns valores
-)
-(setf vM (make-array '(3 3) ;criando uma matriz 3x3
-   :initial-contents '((-1 -1 -1)
-                       (-1  0 -1)
-                       (-1 -1 -1))) ;inicializando a matriz com alguns valores
-)
-
-(setf m1 (make-array `(5 5)
-  :initial-contents `((0  1  3  2 0)
-                      (1 -1 -1 -1 2)
-                      (3 -1 -1 -1 1)
-                      (2 -1 -1 -1 2)
-                      (0  2  1  2 0)))
-)
-
-
-(setf t1 (make-array `(5 5)
-  :initial-contents `((0  1  3  2 0)
-                      (1  1  2 -1 2)
-                      (3 -1 -1 -1 1)
-                      (2 -1 -1 -1 2)
-                      (0  2  1  2 0)))
-)
-
-(setf r1 (make-array `(5 5)
-  :initial-contents `((0 1 3 2 0)
-                      (1 3 1 2 2)
-                      (3 1 2 3 1)
-                      (2 2 3 1 2)
-                      (0 2 1 2 0)))
-)
-
-(setf vm1 (make-array `(5 5)
-	:initial-contents `((-1 -1 -1 -1 -1)
-                      (-1  0  0  0 -1)
-                      (-1  0  0  0 -1)
-                      (-1  0  0  0 -1)
-                      (-1 -1 -1 -1 -1)))
-)
-
-(setf v22 (make-array `(4 4)
-  :initial-contents `((-1 -1 -1 -1)
-                      (-1  0  0 -1)
-                      (-1  0  0 -1)
-                      (-1 -1 -1 -1)))
-)
-
-(setf v33 (make-array `(5 5)
-  :initial-contents `((-1 -1 -1 -1 -1)
-                      (-1  0  0  0 -1)
-                      (-1  0  0  0 -1)
-                      (-1  0  0  0 -1)
-                      (-1 -1 -1 -1 -1)))
-)
-
-(setf v44 (make-array `(6 6)
-  :initial-contents `((-1 -1 -1 -1 -1 -1)
-                      (-1  0  0  0  0 -1)
-                      (-1  0  0  0  0 -1)
-                      (-1  0  0  0  0 -1)
-                      (-1  0  0  0  0 -1)
-                      (-1 -1 -1 -1 -1 -1)))
-)
-
 ;-------------------------------M2---------------------------------
 (setf p2 `(1 2))
 (setf m2 (make-array `(4 4)	:initial-contents `((0  2  1 0)
@@ -93,26 +23,7 @@
                                                   (2 1 2 1)
                                                   (1 2 1 2)
                                                   (0 1 2 0))))
-;-----------------------------M3-----------------------------------
-(setf cp3 `(1 2 3))
-(setf cm3 (make-array `(5 5) :initial-contents `(( 0  2  2  1  0)
-                                                 ( 3 -1 -1 -1  1)
-                                                 ( 1 -1 -1 -1  2)
-                                                 ( 2 -1 -1 -1  2)
-                                                 ( 0  2  1  3  0))))
-
-(setf cr3 (make-array `(5 5) :initial-contents `(( 0  2  2  1  0)
-                                                  ( 3  1  2  3  1)
-                                                  ( 1  3  1  2  2)
-                                                  ( 2  2  3  1  2)
-                                                  ( 0  2  1  3  0))))
-
-(setf cv3 (make-array `(5 5) :initial-contents `((-1 -1 -1 -1 -1)
-                                                 (-1  0  0  0 -1)
-                                                 (-1  0  0  0 -1)
-                                                 (-1  0  0  0 -1)
-                                                 (-1 -1 -1 -1 -1))))
-;-----------------------------M4-----------------------------------
+;-----------------------------cm4-----------------------------------
 (setf cp4 `(0 1 2 3))
 (setf cm4 (make-array `(6 6) :initial-contents `(( 0  2  2  1  2  0)
                                                  ( 2 -1 -1 -1 -1  2)
@@ -127,46 +38,6 @@
                                                   ( 2  3  2  1  0  2)
                                                   ( 0  2  1  1  3  0))))
 (setf cv4 (make-array `(6 6) :initial-contents `((-1 -1 -1 -1 -1 -1)
-                                                 (-1  0  0  0  0 -1)
-                                                 (-1  0  0  0  0 -1)
-                                                 (-1  0  0  0  0 -1)
-                                                 (-1  0  0  0  0 -1)
-                                                 (-1 -1 -1 -1 -1 -1))))
-;-----------------------------M8-----------------------------------
-(setf cp8 `(1 2 3 4))
-(setf cm8 (make-array `(6 6) :initial-contents `(( 1  0  0  0  0  0)
-                                                 ( 0 -1 -1 -1 -1  0)
-                                                 ( 0 -1 -1 -1 -1  0)
-                                                 ( 0 -1 -1 -1 -1  0)
-                                                 ( 0 -1 -1 -1 -1  2)
-                                                 ( 0  0  0  0  4  0))))
-(setf cr8 (make-array `(6 6) :initial-contents `(( 1  0  0  0  0  0)
-                                                 ( 0  2  3  1  4  0)
-                                                 ( 0  1  4  2  3  0)
-                                                 ( 0  4  1  3  2  0)
-                                                 ( 0  3  2  4  1  2)
-                                                 ( 0  0  0  0  4  0))))
-(setf cv8 (make-array `(6 6) :initial-contents `((-1 -1 -1 -1 -1 -1)
-                                                 (-1  0  0  0  0 -1)
-                                                 (-1  0  0  0  0 -1)
-                                                 (-1  0  0  0  0 -1)
-                                                 (-1  0  0  0  0 -1)
-                                                 (-1 -1 -1 -1 -1 -1))))
-;-----------------------------M9-----------------------------------
-(setf cp9 `(1 2 3 4))
-(setf cm9 (make-array `(6 6) :initial-contents `(( 0  0  3  2  0  0)
-                                                 ( 4 -1 -1 -1 -1  0)
-                                                 ( 0 -1 -1 -1 -1  0)
-                                                 ( 3 -1 -1 -1 -1  0)
-                                                 ( 0 -1 -1 -1 -1  2)
-                                                 ( 0  0  0  0  4  0))))
-(setf cr9 (make-array `(6 6) :initial-contents `(( 1  0  0  0  0  0)
-                                                 ( 0  2  3  1  4  0)
-                                                 ( 0  1  4  2  3  0)
-                                                 ( 0  4  1  3  2  0)
-                                                 ( 0  3  2  4  1  2)
-                                                 ( 0  0  0  0  4  0))))
-(setf cv8 (make-array `(6 6) :initial-contents `((-1 -1 -1 -1 -1 -1)
                                                  (-1  0  0  0  0 -1)
                                                  (-1  0  0  0  0 -1)
                                                  (-1  0  0  0  0 -1)
@@ -241,14 +112,6 @@
                                                    (-1  0  0  0  0  0 -1)
                                                    (-1  0  0  0  0  0 -1)
                                                    (-1 -1 -1 -1 -1 -1 -1))))
-(setf m3 (make-array `(6 6)
-  :initial-contents `((0  0  3  2  0 0)
-                      (4 -1 -1 -1 -1 0)
-                      (0 -1 -1 -1 -1 0)
-                      (3 -1 -1 -1 -1 0)
-                      (0 -1 -1 -1 -1 0)
-                      (0  0  0  0  0 0)))
-)
 
 (defun mp (p)
   (car (last p))
@@ -519,43 +382,24 @@
 (defun testa (m r v p d texto)
   (setq ans (resolve limite 1 1 m v p d))
   (cond
-    ( (igual ans r 1 1) (concatenate `string "resolvida: " texto) )
-    ( t (concatenate `string "errada: " texto) )
+    ( (igual ans r 1 1) (concatenate `string "solução igual ao resultado esperado:" texto) )
+    ( t (concatenate `string "solução difere do resultado esperado:" texto) )
   )
 )
 
 (defun main()
-
-    ;(setq tam 6)
-    ;( printMatriz (resolve 10000 1 1 m3 v44 `(1 2 3 4) T) tam )
-
     ;testes passando
     (setq tam 4)
-    (imprima (testa m2 r2 v2 `(1 2) NIL " m2."))
+    (imprima (testa m2 r2 v2 `(1 2) T " m2."))
+    (setq tam 6)
+    (imprima (testa cm4 cr4 cv4 cp4 T " cm4."))
     (setq tam 7)
-    ;(imprima (testa cm3 cr3 cv3 cp3 NIL " cm3."))
-    ;( printMatriz (resolve 10000 1 1 cm3 cv3 `(1 2 3 4) T) tam )
-    ;( printMatriz (resolve 9000000 1 1 cm78 cv78 cp78 NIL) tam )
-    ( printMatriz (resolve 9000000 1 1 cm197 cv197 cp197 T) tam )
+    (imprima (testa cm197 cr197 cv197 cp197 T " matriz apresentada 197"))
+    (imprima (testa cm78 cr78 cv78 cp78 T " matriz apresentada 78"))
 
-    ;( printMatriz (resolve 9000000 1 1 cm233 cv233 cp233 T) tam )
-
-
-    ;problemas
-    ;(setq tam 6)
-    ;(imprima (testa cm4 cr4 cv4 cp4 NIL " cm4."))
-    ;(resolve 10000 1 1 cm9 v44 `(1 2 3 4) T)
-
-    ;(setq tam 6)
-    ;( printMatriz (resolve 10000 1 1 cm8 cv8 `(1 2 3 4) T) tam )
-    ;( printMatriz (resolve 10000 1 1 cm8 cv8 `(1 2 3 4) T) tam )
-    ;(setq tam 6)
-    ;(imprima (testa cm8 cr8 cv8 cp8 T " cm8."))
-
-    ; uma dica loca do Ezequiel:
-    ;se bugar tenta usar def-var. Compilar antes de apresentar:
-    ;clisp -c caina.lisp eeeee clisp caina.fas
-
+    ;exemplo de impressão do resultado:
+    (imprima "exemplo de impressão de resultado, tabuleiro janko 233:")
+    (printMatriz (resolve limite 1 1 cm233 cv233 cp233 T) tam)
 )
 
 
