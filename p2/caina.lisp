@@ -471,7 +471,7 @@
 ;k= limiteDaRecursao, x, y, m, v=matrizGuardaIndexNoVetorDePossiveis,
 ;p=listaDeNumerosPossiveis[100% constante] d=RepetiçãoEhProibidaNasDiagonais
 (defun resolve (k x y m v p s)
-  (printMatriz m tam)
+  ;(printMatriz m tam)
   (setq posConstante (= c (getxym x y v)))
   (setq m-anterior (getxym x y m))
   (setq v-anterior (getxym x y v))
@@ -501,7 +501,7 @@
           (resolve (- k 1) (backX x) (backY x y) m v p voltando)
         )
       )
-      ((and (= y (- tam 2)) (= x (- tam 2))) m) ; resolveu
+      ((and (tahOk x y m) (= y (- tam 2)) (= x (- tam 2))) m) ; resolveu
       ((not (tahOk x y m)) (resolve (- k 1) x y m v p s))
       ((tahOk x y m) (resolve (- k 1) (nextX x) (nextY x y) m v p s))
     )
@@ -535,7 +535,8 @@
     (setq tam 7)
     ;(imprima (testa cm3 cr3 cv3 cp3 NIL " cm3."))
     ;( printMatriz (resolve 10000 1 1 cm3 cv3 `(1 2 3 4) T) tam )
-    ( printMatriz (resolve 9000000 1 1 cm78 cv78 cp78 NIL) tam )
+    ;( printMatriz (resolve 9000000 1 1 cm78 cv78 cp78 NIL) tam )
+    ( printMatriz (resolve 9000000 1 1 cm197 cv197 cp197 T) tam )
 
     ;( printMatriz (resolve 9000000 1 1 cm233 cv233 cp233 T) tam )
 
