@@ -1,12 +1,13 @@
 ;absolutas->
-(setq e 0)
-(setq inf 99999999999)
-(setq o (- 1))
-(setq di 1)
-(setq indo T)
-(setq voltando NIL)
-(setq tam 6)
-(setq limite 100000000)
+(defvar e 0)
+(defvar inf 99999999999)
+(defvar o (- 1))
+(defvar di 1)
+(defvar indo T)
+(defvar voltando NIL)
+(defvar tam 6)
+(defvar limite 100000000)
+(defvar c (- 2))
 
 ;matrizes para testar ->
 (setq tamM 3)
@@ -301,8 +302,8 @@
 
 (defun nextY (x y)
   (cond
-    ( (and (>= x (- tam 2)) (<= y (- tam 3) ) ) (+ y 1) )
-    ( (and (>= x (- tam 2)) (>= y (- tam 3) ) ) (- 0 1) ) ; chegou no final!!! troquei aqui de > para >=. se bugar pode ser isso. Boa sorte Cainã do futuro
+    ( (and (= x (- tam 2)) (< y (- tam 2) ) ) (+ y 1) )
+    ( (and (= x (- tam 2)) (= y (- tam 2) ) ) (- 1) ) ; chegou no final!!! troquei aqui de > para >=. se bugar pode ser isso. Boa sorte Cainã do futuro
     (t y)
   )
 )
@@ -368,7 +369,7 @@
   )
 )
 
-(defun linhaCerta (y m tam)
+(defun linhaCerta (y m)
   (setq esq (getxym 0 y m)) ;numeros esq e dir dos lados da matriz (exigências)
   (setq dir (getxym (- tam 1) y m))
   (setq qvdd ( quantosVejoDaDireita (- tam 1) y m 0))
@@ -381,7 +382,7 @@
   )
 )
 
-(defun colunaCerta (x m tam)
+(defun colunaCerta (x m)
   (setq cima  (getxym x 0 m))
   (setq baixo (getxym x (- tam 1) m))
   (setq qvdc (quantosVejoDeCima x 0 m 0) )
@@ -457,15 +458,12 @@
 
 (defun tahOk (x y m)
   (progn
-    (setq num (getxym x y m))
   	(setq vc (vejoCerto x y m))
-    (setXY o x y m)
-  	(setq ntl (not (jaTemNaLinha num x y m)))
-    (setq ntc (not (jaTemNaColuna num x y m)))
-    (setq ntd (not (jaTemNasDiagonais num x y m)))
-    (setXY num x y m)
-    (setq lc (or (< x (- tam 2))  (linhaCerta y m tam)) )
-    (setq cc (or (< y (- tam 2)) (colunaCerta x m tam)) )
+  	(setq ntl (not (jaTemNaLinha (getxym x y m) x y m)))
+    (setq ntc (not (jaTemNaColuna (getxym x y m) x y m)))
+    (setq ntd (not (jaTemNasDiagonais (getxym x y m) x y m)))
+    (setq lc (or (< x (- tam 2))  (linhaCerta y m)) )
+    (setq cc (or (< y (- tam 2)) (colunaCerta x m)) )
     (and vc ntl ntc (or ntd (/= (getxym 0 0 m) di)) lc cc)
   )
 )
@@ -474,7 +472,7 @@
 ;p=listaDeNumerosPossiveis[100% constante] d=RepetiçãoEhProibidaNasDiagonais
 (defun resolve (k x y m v p s)
   (printMatriz m tam)
-  (setq posConstante (= (- 1) (getxym x y v)))
+  (setq posConstante (= c (getxym x y v)))
   (setq m-anterior (getxym x y m))
   (setq v-anterior (getxym x y v))
   (progn
@@ -496,7 +494,7 @@
           (resolve (- k 1) (backX x) (backY x y) m v p voltando)
         )
       )
-      ((not (getxym x y m)) ; substitui essa linha pela de baixo
+      ((not (getxym x y m))
         (progn
           (setXY o x y m)
           (setXY 0 x y v)
@@ -505,7 +503,7 @@
       )
       ((and (= y (- tam 2)) (= x (- tam 2))) m) ; resolveu
       ((not (tahOk x y m)) (resolve (- k 1) x y m v p s))
-      ((and (tahOk x y m) (or (/= y (- tam 2)) (/= x (- tam 2)))) (resolve (- k 1) (nextX x) (nextY x y) m v p s))
+      ((tahOk x y m) (resolve (- k 1) (nextX x) (nextY x y) m v p s))
     )
   )
 )
