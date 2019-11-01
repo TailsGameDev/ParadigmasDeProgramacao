@@ -1,13 +1,30 @@
 ;absolutas->
+;constante 'e' define quando não há exigências para quantos prédios devem ser vistos
 (defvar e 0)
-(defvar inf 99999999999)
+(defvar inf 99999999999) ; infinito
+;o é a constante que define o número que indica que uma posição não foi visitada
 (defvar o (- 1))
-(defvar di 1)
+(defvar di 1) ; di define se as diagonais devem ser verificadas
+; indo e vindo são maneiras de indicar se o programa está na direção de tentar
+; novas possibilidades para o número atual e os próximos, ou se já esgotou as
+; possibilidades e está voltando para consertar números anteriores
 (defvar indo T)
 (defvar voltando NIL)
+; tam define o tamanho da matriz incluindo as duas linhas e colunas extra
 (defvar tam 6)
-(defvar limite 100000000)
-(defvar c (- 2))
+(defvar limite 100000000) ; limite da recursão evita execuções eternas
+(defvar c (- 2)) ; c na matriz v indica que a posição guarda uma constante em m.
+
+#|
+Matrizes são representadas com os arrays, conforme o exemplo do professor.
+
+p é uma lista com os números possíveis para uma matriz, m é uma matriz, com
+inclusive na volta dela, dizendo quandos prédios devem ser vistos.
+r é a matriz de resultado, que se espera encontrar com a execução do programa.
+v é uma matriz que guarda um índice em cada par xy, que é usado para acessar a
+lista p de números possíveis.
+estão sendo feito vários testes com uma execução do programa.
+|#
 
 ;-------------------------------M2---------------------------------
 (setf p2 `(1 2))
@@ -113,10 +130,12 @@
                                                    (-1  0  0  0  0  0 -1)
                                                    (-1 -1 -1 -1 -1 -1 -1))))
 
+;maior possivel!!
 (defun mp (p)
   (car (last p))
 )
 
+; retorna o iésimo elemento de uma lista
 (defun getI (i lista)
   (if (= i 0)
     (car lista)
@@ -124,6 +143,7 @@
   )
 )
 
+; função auxiliar para imprimir uma matriz formatada
 (defun printMatriz (m tm)
   (setq s '(#\Newline))
   (dotimes (i tm)
@@ -141,6 +161,8 @@
   (write-line (write-to-string s))
 )
 
+
+;as próximas funções servem para saber o próximo x ou y, ou o anterior dado um x ou y atual
 (defun backX (x)
   (cond
     ((<= x 1) (- tam 2) )
@@ -171,10 +193,13 @@
   )
 )
 
+; como a função print deveria ter sido implementada por quem fez o Lisp
 (defun imprima (g)
   (write-line (write-to-string g))
 )
 
+; redefinindo a função de acessar e alterar elemento da matriz, para que
+; fique igual ao trabalho que fizemos em Haskell
 (defun getxym (x y m)
   (aref m y x)
 )
@@ -183,6 +208,7 @@
   (setf (aref m y x) num)
 )
 
+;Dado uma posição e um número, verifica se esse número já existe na linha, coluna ou diagonais
 (defun jaTemNaLinha (n x y m)
 	(cond
 		((= x 1) NIL)
@@ -232,6 +258,8 @@
   )
 )
 
+; linhaCerta e colunaCerta verificam se a quantidade de prédios vista é exatamente
+; igual à esperada
 (defun linhaCerta (y m)
   (setq esq (getxym 0 y m)) ;numeros esq e dir dos lados da matriz (exigências)
   (setq dir (getxym (- tam 1) y m))
@@ -258,6 +286,7 @@
   )
 )
 
+; funções quantos vejo contam quantos prédios são vistos de uma determinada direção
 (defun quantosVejoDeCima (x y matriz maior)
 	(cond
 		((= y 0) (quantosVejoDeCima x (+ y 1) matriz maior))
@@ -294,6 +323,8 @@
 	)
 )
 
+; vejoCerto de cima e da esquerda verificam se a resolução está indo bem, isto é,
+; se a quantidade vista é menor ou igual à desejada. De baixo e direita exigem exatidão.
 (defun vejoCertoDeCima (x matriz)
 	(or (>= (getxym x 0 matriz) (quantosVejoDeCima x 0 matriz 0)) (= (getxym x 0 matriz) e))
 )
@@ -310,6 +341,8 @@
 	(or (>= (getxym 0 y matriz) (quantosVejoDaEsquerda 0 y matriz 0)) (= (getxym 0 y matriz) e))
 )
 
+; função retorna verdade caso o número em (x,y) seja um bom palpite quanto à
+; quantidade de prédios vistos.
 (defun vejoCerto (x y m)
 	(cond
 		((and (= x (- tam 2)) (= y (- tam 2))) (and (vejoCertoDeCima x m) (vejoCertoDaDireita y m) (vejoCertoDeBaixo x m) (vejoCertoDaEsquerda y m)))
@@ -319,6 +352,10 @@
 	)
 )
 
+; tahOk retorna se o número em (x,y) é um bom palpite, ou seja, com tudo o que se sabe
+; no momento da execução, verifica se aquele número provoca qualquer incoerência.
+; isso considera a quantidade de prédios vistos de todas as direções, e se o número
+; se repete na linha, diagonal ou coluna.
 (defun tahOk (x y m)
   (progn
   	(setq vc (vejoCerto x y m))
@@ -331,10 +368,14 @@
   )
 )
 
+; resolve implementa o backtracking. Ela posiciona o próximo número na lista de
+; possíveis na posição (x,y), ou pula caso ela seja constante. Depois, chama outras
+; funções para saber se é um bom palpite, e de acordo com isso, decide qual é a
+; próxima posição a se tentar resolver.
 ;k= limiteDaRecursao, x, y, m, v=matrizGuardaIndexNoVetorDePossiveis,
-;p=listaDeNumerosPossiveis[100% constante] d=RepetiçãoEhProibidaNasDiagonais
+;p=listaDeNumerosPossiveis[100% constante] s= indo ou voltando
 (defun resolve (k x y m v p s)
-  ;(printMatriz m tam)
+  ;(printMatriz m tam) ; remova o ';' para acompanhar o puzzle sendo resolvido
   (setq posConstante (= c (getxym x y v)))
   (setq m-anterior (getxym x y m))
   (setq v-anterior (getxym x y v))
@@ -371,6 +412,7 @@
   )
 )
 
+; dada uma matriz m e uma matriz r, retorna true se m é igual a r
 (defun igual (m r x y)
   (cond
     ((= y (- 1)) t)
@@ -379,8 +421,10 @@
   )
 )
 
-(defun testa (m r v p d texto)
-  (setq ans (resolve limite 1 1 m v p d))
+; dada um conjunto para teste (m,r,v,p), retorna um texto indicando se a resolução
+; encontrada é igual à esperada. Isso permite fazer vários testes em uma execução.
+(defun testa (m r v p s texto)
+  (setq ans (resolve limite 1 1 m v p s))
   (cond
     ( (igual ans r 1 1) (concatenate `string "solução igual ao resultado esperado:" texto) )
     ( t (concatenate `string "solução difere do resultado esperado:" texto) )
