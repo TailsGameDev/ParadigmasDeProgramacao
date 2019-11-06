@@ -11,6 +11,8 @@ colineares(ponto(X1,Y1), ponto(X2,Y2), ponto(X3,Y3), C) :-
 colineares(ponto(X1,Y1), ponto(X2,Y2), ponto(X3,Y3)) :-
   ( (X1*Y3+X2*Y1+X3*Y2)-(X1*Y2+X3*Y1+X2*Y3) =:= 0 ).
 
+formaTrigangulo(ponto(X1,Y1), ponto(X2,Y2), ponto(X3,Y3)) :-
+  not(colineares(ponto(X1,Y1), ponto(X2,Y2), ponto(X3,Y3))).
 /*
 1))))
 A)
@@ -18,5 +20,11 @@ A)
 D = 1.4142135623730951.
 
 B)
-colineares(ponto(1,1),ponto(2,2),ponto(3,3),C).
+?- colineares(ponto(1,1),ponto(2,2),ponto(3,3)).
+true.
+
+C)
+?- formaTrigangulo(ponto(1,1),ponto(2,2),ponto(3,3)).
+false.
+
 */
