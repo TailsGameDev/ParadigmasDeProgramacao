@@ -140,65 +140,6 @@ solucao(ListaSolucao) :-
 
     %O veículo da Chevrolet está em algum lugar à direita do carro de 1965.
     aDireita(carro(_, _, chevrolet, _, _, _), carro(_, 1965, _, _, _, _), ListaSolucao),
-/**/
-    %Testa todas as possibilidades...
-    cor(Cor1), cor(Cor2), cor(Cor3), cor(Cor4), cor(Cor5),
-    todosDiferentes([Cor1, Cor2, Cor3, Cor4, Cor5]),
-
-    ano(Ano1), ano(Ano2), ano(Ano3), ano(Ano4), ano(Ano5),
-    todosDiferentes([Ano1, Ano2, Ano3, Ano4, Ano5]),
-
-    montadora(Montadora1), montadora(Montadora2), montadora(Montadora3), montadora(Montadora4), montadora(Montadora5),
-    todosDiferentes([Montadora1, Montadora2, Montadora3, Montadora4, Montadora5]),
-
-    dono(Dono1), dono(Dono2), dono(Dono3), dono(Dono4), dono(Dono5),
-    todosDiferentes([Dono1, Dono2, Dono3, Dono4, Dono5]),
-
-    placa(Placa1), placa(Placa2), placa(Placa3), placa(Placa4), placa(Placa5),
-    todosDiferentes([Placa1, Placa2, Placa3, Placa4, Placa5]),
-
-    km(Km1), km(Km2), km(Km3), km(Km4), km(Km5),
-    todosDiferentes([Km1, Km2, Km3, Km4, Km5]).
-
-
-solucao2(ListaSolucao) :-
-
-    ListaSolucao = [
-        carro(Cor1, Ano1, Montadora1, Dono1, Placa1, Km1),
-        carro(Cor2, Ano2, Montadora2, Dono2, Placa2, Km2),
-        carro(Cor3, Ano3, Montadora3, Dono3, Placa3, Km3),
-        carro(Cor4, Ano4, Montadora4, Dono4, Placa4, Km4),
-        carro(Cor5, Ano5, Montadora5, Dono5, Placa5, Km5)
-    ],
-
-%carro(_, _, _, _, _, _)
-
-%O carro da placa CCC-3333 está em algum lugar entre o carro Branco e o carro da placa DDD-4444, nessa ordem.
-    entre(carro(branco, _, _, _, _, _),
-          carro(_, _, _, _, ccc333, _),
-          carro(_, _, _, _, ddd444, _),
-          ListaSolucao),
-
-    %Glenn está exatamente à direita do carro de 140.000 Km.
-    exAEsq(carro(_, _, _, _, _, 140), carro(_, _, _, glenn, _, _), ListaSolucao),
-
-    %O veículo de 1960 tem 140.000 Km.
-    member(carro(_, 1960,_ , _, _, 140), ListaSolucao),
-
-    %Harley está em uma das pontas.
-    noCanto(carro(_,_ ,_ , harley, _, _),ListaSolucao),
-
-    %O carro Branco está em algum lugar entre o carro da Ford e o carro mais novo, nessa ordem.
-    entre(carro(_, _, ford, _, _, _),
-          carro(branco, _, _, _, _, _),
-          carro(_, 1970, _, _, _, _),
-          ListaSolucao),
-
-    %O veículo de placa AAA-1111 está exatamente à esquerda do carro da Mercedes.
-    exAEsq(carro(_, _, _, _, aaa111, _), carro(_, _, mercedes, _, _, _), ListaSolucao),
-
-    %O carro Branco está em algum lugar à esquerda do veículo de 100.000 Km.
-    aEsquerda(carro(branco, _, _, _, _, _), carro(_, _, _, _, _, 100 ), ListaSolucao),
 
     %Testa todas as possibilidades...
     cor(Cor1), cor(Cor2), cor(Cor3), cor(Cor4), cor(Cor5),
@@ -218,3 +159,13 @@ solucao2(ListaSolucao) :-
 
     km(Km1), km(Km2), km(Km3), km(Km4), km(Km5),
     todosDiferentes([Km1, Km2, Km3, Km4, Km5]).
+
+/*
+?- solucao(L).
+L = [carro(amarelo, 1965, ford, harley, aaa111, 190),
+      carro(branco, 1955, mercedes, ponce, eee555, 80),
+       carro(verde, 1970, chevrolet, aguiar, bbb222, 100),
+        carro(vermelho, 1960, porsche, thales, ccc333, 140),
+         carro(azul, 1950, volkswagen, glenn, ddd444, 210)] ;
+false.
+*/
