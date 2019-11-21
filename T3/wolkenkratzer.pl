@@ -5,7 +5,9 @@ sudoku(Rows) :-
         append(Rows, Vs), Vs ins 1..Length,
         maplist(all_distinct, Rows),
         transpose(Rows, Columns),
-        maplist(all_distinct, Columns).
+        maplist(all_distinct, Columns),
+        Rows = [_,Bs,_,_,_,_,_,_,_],
+        quantosVejo(Bs, -1, V), V #= 5.
 
 quantosVejo([], _, 0).
 quantosVejo([H|T], Max, V) :- H > Max, quantosVejo(T, H, V1), V is V1 + 1, !.
@@ -14,7 +16,7 @@ quantosVejo([_|T], Max, V1) :- quantosVejo(T, Max, V1).
 inverte([], []).
 inverte([H|T], I) :- inverte(T, I1), append(I1, [H], I).
 
-vejoCerto(Lista, V) :- quantosVejo(Lista, -1, V).
+% vejoCerto(Lista, V) :- quantosVejo(Lista, -1, V).
 
 soma([], 0).
 soma([H|T], S) :- soma(T, S1), S is S1 + H.
@@ -28,3 +30,13 @@ problem(1, [[_,_,_,_,_,_,_,_,_],
             [5,_,_,_,_,_,_,7,3],
             [_,_,2,_,1,_,_,_,_],
             [_,_,_,_,4,_,_,_,9]]).
+
+% [9, 8, 7, 6, 5, 4, 3, 2, 1].
+% [2, 4, 6, 1, 7, 3, 9, 8, 5].
+% [3, 5, 1, 9, 2, 8, 7, 4, 6].
+% [1, 2, 8, 5, 3, 7, 6, 9, 4].
+% [6, 3, 4, 8, 9, 2, 1, 5, 7].
+% [7, 9, 5, 4, 6, 1, 8, 3, 2].
+% [5, 1, 9, 2, 8, 6, 4, 7, 3].
+% [4, 7, 2, 3, 1, 9, 5, 6, 8].
+% [8, 6, 3, 7, 4, 5, 2, 1, 9].
