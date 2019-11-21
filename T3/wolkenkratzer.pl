@@ -1,13 +1,24 @@
 :- use_module(library(clpfd)).
 
 sudoku(Rows) :-
-        length(Rows, Length), maplist(same_length(Rows), Rows),
-        append(Rows, Vs), Vs ins 1..Length,
+        length(Rows, 2), maplist(same_length(Rows), Rows),
+        append(Rows, Vs), Vs ins 1..2,
         maplist(all_distinct, Rows),
         transpose(Rows, Columns),
         maplist(all_distinct, Columns),
-        % Rows = [_,Bs,_,_,_,_,_,_,_],
-        % vejoCerto(Bs, 5).
+        Rows = [As,Bs],
+        % maplist(limite, As),
+        % maplist(limite, Bs),
+        vejoCerto(As, 2),
+        vejoCerto(Bs, 1).
+%         blocks(As, Bs, Cs),
+%         blocks(Ds, Es, Fs),
+%         blocks(Gs, Hs, Is).
+%
+% blocks([], [], []).
+% blocks([N1,N2,N3|Ns1], [N4,N5,N6|Ns2], [N7,N8,N9|Ns3]) :-
+% all_distinct([N1,N2,N3,N4,N5,N6,N7,N8,N9]),
+% blocks(Ns1, Ns2, Ns3).
 
 quantosVejo([], 0).
 quantosVejo(Lista, V) :- quantosVejoRecursivo(Lista, -1, V).
@@ -15,6 +26,8 @@ quantosVejo(Lista, V) :- quantosVejoRecursivo(Lista, -1, V).
 quantosVejoRecursivo([], _, 0).
 quantosVejoRecursivo([H|T], Max, V) :- H #> Max, quantosVejoRecursivo(T, H, V1), V is V1 + 1, !.
 quantosVejoRecursivo([_|T], Max, V1) :- quantosVejoRecursivo(T, Max, V1).
+
+limite(A) :- A in 1..2.
 
 inverte([], []).
 inverte([H|T], I) :- inverte(T, I1), append(I1, [H], I).
@@ -24,15 +37,8 @@ vejoCerto(Lista, V) :- quantosVejo(Lista, V).
 soma([], 0).
 soma([H|T], S) :- soma(T, S1), S is S1 + H.
 
-problem(1, [[_,_,_,_,_,_,_,_,_],
-            [_,_,_,_,_,3,_,8,5],
-            [_,_,1,_,2,_,_,_,_],
-            [_,_,_,5,_,7,_,_,_],
-            [_,_,4,_,_,_,1,_,_],
-            [_,9,_,_,_,_,_,_,_],
-            [5,_,_,_,_,_,_,7,3],
-            [_,_,2,_,1,_,_,_,_],
-            [_,_,_,_,4,_,_,_,9]]).
+problem(1, [[_,_],
+            [_,_]]).
 
 % ?- vejoCerto([A,B,C,D,E], 4), A in 1..5, B in 1..5, C in 1..5, D in 1..5, E in 1..5, all_distinct([A,B,C,D,E]), label([A,B,C,D,E]).
 
