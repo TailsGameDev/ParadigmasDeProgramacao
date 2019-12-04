@@ -1,24 +1,44 @@
 :- use_module(library(clpfd)).
 
 sudoku(Rows) :-
-        length(Rows, 2), maplist(same_length(Rows), Rows),
-        append(Rows, Vs), Vs ins 1..2,
+        length(Rows, 4), maplist(same_length(Rows), Rows),
+        append(Rows, Vs), Vs ins 1..4,
         maplist(all_distinct, Rows),
         transpose(Rows, Columns),
         maplist(all_distinct, Columns),
-        Rows = [As,Bs],
+        Rows = [[A11, A12, A13, A14],
+                [A21, A22, A23, A24],
+                [A31, A32, A33, A34],
+                [A41, A42, A43, A44]],
         % maplist(limite, As),
         % maplist(limite, Bs),
-        vejoCerto(As, 2),
-        vejoCerto(Bs, 1).
-%         blocks(As, Bs, Cs),
-%         blocks(Ds, Es, Fs),
-%         blocks(Gs, Hs, Is).
-%
-% blocks([], [], []).
-% blocks([N1,N2,N3|Ns1], [N4,N5,N6|Ns2], [N7,N8,N9|Ns3]) :-
-% all_distinct([N1,N2,N3,N4,N5,N6,N7,N8,N9]),
-% blocks(Ns1, Ns2, Ns3).
+
+        % Linhas da esquerda para a direita
+        vejoCerto([A11, A12, A13, A14], 2),
+        % vejoCerto([A21, A22, A23, A24], 0),
+        vejoCerto([A31, A32, A33, A34], 3),
+        % vejoCerto([A41, A42, A43, A44], 0),
+
+        % Colunas de cima para baixo
+
+        % vejoCerto([A11, A21, A31, A41], 0),
+        % vejoCerto([A12, A22, A32, A42], 0),
+        % vejoCerto([A13, A23, A33, A43], 0),
+        % vejoCerto([A14, A24, A34, A44], 0),
+
+        % Linhas da direita para a esquerda
+
+        % vejoCerto([A14, A13, A12, A11], 0),
+        % vejoCerto([A24, A23, A22, A21], 0),
+        % vejoCerto([A34, A33, A32, A31], 0),
+        % vejoCerto([A44, A43, A42, A41], 0),
+
+        % Colunas de baixo para cima
+
+        % vejoCerto([A41, A31, A21, A11], 0),
+        vejoCerto([A42, A32, A22, A12], 3),
+        vejoCerto([A43, A33, A23, A13], 4).
+        % vejoCerto([A44, A34, A24, A14], 0).
 
 quantosVejo([], 0).
 quantosVejo(Lista, V) :- quantosVejoRecursivo(Lista, -1, V).
@@ -37,8 +57,10 @@ vejoCerto(Lista, V) :- quantosVejo(Lista, V).
 soma([], 0).
 soma([H|T], S) :- soma(T, S1), S is S1 + H.
 
-problem(1, [[_,_],
-            [_,_]]).
+problem(1, [[_,_,_,_],
+            [_,_,_,_],
+            [_,_,_,_],
+            [_,_,_,_]]).
 
 % ?- vejoCerto([A,B,C,D,E], 4), A in 1..5, B in 1..5, C in 1..5, D in 1..5, E in 1..5, all_distinct([A,B,C,D,E]), label([A,B,C,D,E]).
 
