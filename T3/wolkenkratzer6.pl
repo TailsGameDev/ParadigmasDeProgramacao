@@ -51,8 +51,8 @@ wolkenkratzer(Rows) :-
 
         % Diagonais
 
-        % vejoCerto([A11, A22, A33, A44, A55, A66], 0),
-        % vejoCerto([A16, A25, A34, A43, A52, A61], 0).
+        % all_distinct([A11, A22, A33, A44, A55, A66]),
+        % all_distinct([A16, A25, A34, A43, A52, A61]).
 
 vejoCerto([A, B, C, D, E, F], X) :- L1 is 1 + 6 - X, A in 1..L1,
                                     L2 is 2 + 6 - X, B in 1..L2,
