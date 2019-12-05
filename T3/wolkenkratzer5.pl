@@ -57,6 +57,7 @@ vejoCerto([A, B, C, D, E], X) :- L1 is 1 + 5 - X, A in 1..L1,
 quantosVejo(Lista, Z) :- quantosVejoRecursivo(Lista, 0, Z).
 
 quantosVejoRecursivo([], _, 0).
+quantosVejoRecursivo([0|T], Max, V) :- quantosVejoRecursivo(T, Max, V)
 quantosVejoRecursivo([H|T], Max, V) :- H #> Max, quantosVejoRecursivo(T, H, V1), V is V1 + 1.
 quantosVejoRecursivo([H|T], Max, V1) :- H #< Max, quantosVejoRecursivo(T, Max, V1).
 
